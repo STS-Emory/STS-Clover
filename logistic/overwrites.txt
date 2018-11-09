@@ -1,0 +1,44 @@
+## public/lib/angular-xeditable/dist/css/xedit-table.css
+# Line 90
+.editable-click,
+a.editable-click {
+  text-decoration: none;
+  color: #428bca;
+}
+
+## Database
+sts-integratedsystem -> sts
+sts-integratedsystem-dev -> sts-dev
+
+use admin
+db.runCommand({copydb:1, fromdb:'sts-integratedsystem', todb: 'sts'})
+db.runCommand({copydb:1, fromdb:'sts-integratedsystem-dev', todb: 'sts-dev'})
+
+## Model: Walkin
+os & deviceType -> DeviceInfo
+
+db.walkins.find().forEach(function(walkin){
+	
+	if( (walkin.deviceCategory == "Gaming System" || walkin.deviceCategory == "TV/Media Device") && walkin.deviceType )
+		walkin.deviceInfo = walkin.deviceType;
+	else if( (walkin.deviceCategory == "Computer" || walkin.deviceCategory == "Phone/Tablet") && walkin.os )
+		walkin.deviceInfo = walkin.os;
+	else if( walkin.deviceCategory != "Other") walkin.deviceInfo = 'N/A';
+
+	delete walkin.os; delete walkin.deviceType;
+	db.walkins.save(walkin);
+});
+
+## Model: DeskTask -> LibraryGuidance
+
+db.desktasks.renameCollection('libraryguidances');
+
+## User-Entry
+netid->username
+
+db.userentries.find().forEach(function(entry){
+	entry.username = entry.netid;
+	delete entry.netid;
+	db.userentries.save(entry);
+});
+

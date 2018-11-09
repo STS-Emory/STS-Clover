@@ -1,0 +1,43 @@
+<section class="walkin-text-content" ng-controller="CustomerWalkinCustomerController" ng-init="status.error=undefined">
+  <div class="walkin-field-content">
+    <p class="walkin-field-label" ng-show="reference.type=='walk-in' || reference.type=='check-in'">Here to complete a previous visit?</p>
+    <p class="walkin-field-label" ng-show="reference.type=='sitask'">Here to resolve the issue?</p>
+    <div ng-show="reference.type=='walk-in'">
+      <label style="color: #d60d8c; font-size: 36px;">Issue</label>
+      <hr style="width: 30%; border-top: 2px solid black; margin-top: -10px; margin-bottom: 2em;"/>
+      <p style="font-size: 36px; font-weight: bold;">
+        "{{reference.ticket.description}}"
+      </p>
+    </div>
+
+    <div ng-show="reference.type=='check-in'">
+      <p style="font-size: 36px; font-weight: bold; margin: 1.4em 0;">
+        <label style="color: #d60d8c; font-size: 36px;">Device for pick-up</label>
+        <hr style="width: 30%; border-top: 2px solid black; margin-top: -10px; margin-bottom: 2em;"/>
+         "{{reference.ticket.deviceManufacturer}} {{reference.ticket.deviceModel}}"
+      </p>
+    </div>
+
+    <div ng-show="reference.type=='sitask'">
+      <label style="color: #d60d8c; font-size: 36px;">Issue</label>
+      <hr style="width: 30%; border-top: 2px solid black; margin-top: -10px; margin-bottom: 2em;"/>
+      <p style="font-size: 36px; font-weight: bold;">
+        "{{reference.ticket.message}}"
+      </p>
+    </div>
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-default" ui-sref="customer.walkin.first-name">No</button>
+
+    <button ng-show="reference.type=='walk-in'" class="btn btn-md btn-primary"
+            ng-click="createWalkinFromReference()">Yes</button>
+
+    <div ng-show="reference.type=='check-in'" style="font-size: 28px; color: red; margin: 1.2em 0;">
+      If you are here for pick-up only, please let a technician know.
+    </div>
+
+    <button ng-show="reference.type=='sitask'" class="btn btn-md btn-primary" ui-sref="customer.walkin.first-name"
+            ng-click="walkin.description = reference.ticket.description">Yes</button>
+  </footer>
+</section>

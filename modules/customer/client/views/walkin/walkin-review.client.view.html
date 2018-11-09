@@ -1,0 +1,48 @@
+<section class="walkin-review-content" ng-controller="CustomerWalkinReviewController" ng-init="status.error=undefined">
+  <p class="walkin-field-label">Please review your information</p>
+  <div class="walkin-review-text">
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3"><b>Name:</b></label>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 8px;">
+          {{walkin.user.firstName + ' ' + walkin.user.lastName}}
+        </div>
+      </div>
+    </div>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3"><b>Phone:</b></label>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 8px;">
+          {{walkin.user.phone.substring(0, 3) + '-' + walkin.user.phone.substring(3, 6) + '-' + walkin.user.phone.substring(6)}}
+        </div>
+      </div>
+    </div>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3"><b>Location:</b></label>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 8px;">
+          {{walkin.user.location}}
+        </div>
+      </div>
+    </div>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3"><b>Device:</b></label>
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="margin-top: 8px;">
+          {{walkin.deviceCategory==='Other'? walkin.deviceCategory + ' (' + walkin.otherDevice + ')' :
+            walkin.deviceInfo? walkin.deviceCategory + ' (' + walkin.deviceInfo + ')' : walkin.deviceCategory}}
+        </div>
+      </div>
+    </div>
+    <hr style="margin: 0 0 0.5em 0; padding: 0;"/>
+    <div style="text-align: left">
+      <label><b>Problems:</b></label>
+      <p class="walkin-review-text-problem">{{walkin.description}}</p>
+    </div>
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-primary" ng-click="confirm()" style="width: auto;">
+      <i class="fa fa-check-circle-o"></i>&nbsp;&nbsp;Confirm</button>
+  </footer>
+</section>

@@ -1,0 +1,126 @@
+<section ng-controller="AdminSettingController" ng-init="init()">
+  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="panel panel-warning">
+      <div class="panel-heading" style="font-size: 16px;">User Option Settings</div>
+      <div class="panel-body" style="max-height: 75vh; overflow: auto;">
+        <h4>Wildcard NetID prefixes<button class="btn btn-xs btn-warning pull-right" style="margin: -2px 0 0 0;" ng-click="newWildcardNetIDPrefix(setting.user_wildcard_prefixes)">New</button></h4>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.user_wildcard_prefixes.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, prefix) in setting.user_wildcard_prefixes" style="padding: 3px 10px;">
+            {{idx+1}}. {{prefix}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.user_wildcard_prefixes.splice(idx,1)"></a>
+          </li>
+        </ul>
+        <h4>Location options<button class="btn btn-xs btn-warning pull-right" style="margin: -2px 0 0 0;" ng-click="newLocationOption(setting.location_options)">New</button></h4>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.location_options.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, location) in setting.location_options" style="padding: 3px 10px;">
+            {{idx+1}}. {{location}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.location_options.splice(idx,1)"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="panel fresh-color panel-success">
+      <div class="panel-heading" style="font-size: 16px;">Device Option Settings</div>
+      <div class="panel-body" style="font-size: 12px; max-height: 75vh; overflow: auto;">
+        <h4>Computer options</h4>
+        <h5>Computer categories/versions
+          <span class="fa fa-info-circle" tooltip-placement="right" uib-tooltip="Walk-in options"></span>
+          <button class="btn btn-xs btn-warning pull-right" style="margin: -5px 0 0 0;" ng-click="newDeviceCategory(setting.computer_options)">New</button>
+        </h5>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.computer_options.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, option) in setting.computer_options" style="padding: 3px 10px;">
+            {{idx+1}}. {{option.key}}
+            <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.computer_options.splice(idx,1)"></a>
+            <a class="fa fa-plus pull-right" style="margin-top: 2px;" ng-click="newDeviceType(option)"></a>
+
+            <ul class="list-group" style="margin-top: 3px; margin-bottom: 0px;">
+              <li class="list-group-item" ng-show="option.values.length == 0" style="padding: 3px 10px;">None</li>
+              <li class="list-group-item" ng-repeat="(num, os) in option.values" style="padding: 3px 10px;">
+                >> {{os}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="option.values.splice(num,1)"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h5>Computer OS editions
+          <span class="fa fa-info-circle" tooltip-placement="right" uib-tooltip="Check-in options"></span>
+          <button class="btn btn-xs btn-warning pull-right" style="margin: -5px 0 0 0;" ng-click="newOSEdition(setting.computer_os_editions)">New</button>
+        </h5>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.computer_os_editions.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, editions) in setting.computer_os_editions" style="padding: 3px 10px;">
+            {{idx+1}}. {{editions}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.computer_os_editions.splice(idx,1)"></a>
+          </li>
+        </ul>
+
+        <h5>Allowed check-in items
+          <span class="fa fa-info-circle" tooltip-placement="right" uib-tooltip="Check-in options"></span>
+          <button class="btn btn-xs btn-warning pull-right" style="margin: -5px 0 0 0;" ng-click="newCheckinItem(setting.checkin_items)">New</button>
+        </h5>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.checkin_items.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, item) in setting.checkin_items" style="padding: 3px 10px;">
+            {{idx+1}}. {{item}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.checkin_items.splice(idx,1)"></a>
+          </li>
+        </ul>
+
+        <h5><span style="font-size: 18px;">Non-computer options</span>
+          <span class="fa fa-info-circle" tooltip-placement="right" uib-tooltip="ie. tablet, console"></span>
+          <button class="btn btn-xs btn-warning pull-right" style="margin: -2px 0 0 0;" ng-click="newDeviceCategory(setting.device_options)">New</button>
+        </h5>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.device_options.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, option) in setting.device_options" style="padding: 3px 10px;">
+            {{idx+1}}. {{option.key}}
+            <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.device_options.splice(idx,1)"></a>
+            <a class="fa fa-plus pull-right" style="margin-top: 2px;" ng-click="newDeviceType(option)"></a>
+
+            <ul class="list-group" style="margin-top: 3px; margin-bottom: 0px;">
+              <li class="list-group-item" ng-show="option.values.length == 0" style="padding: 3px 10px;">None</li>
+              <li class="list-group-item" ng-repeat="(num, value) in option.values" style="padding: 3px 10px;">
+                >> {{value}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="option.values.splice(num,1)"></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="panel fresh-color panel-primary">
+      <div class="panel-heading" style="font-size: 16px;">General Settings</div>
+      <div class="panel-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="livesync" class="col-sm-5 control-label" style="margin-top: 11px;">ServiceNow Live Sync</label>
+            <div class="col-sm-offset-1 col-sm-6" style="padding-top:10px;">
+              <input bs-switch id="livesync" type="checkbox" ng-model="setting.servicenow_liveSync" switch-size="medium" class="toggle-checkbox">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="panel fresh-color panel-info" style="margin-bottom: 15px;">
+      <div class="panel-heading" style="font-size: 16px;">Scheduled Job Settings
+        <button class="btn btn-xs btn-primary pull-right" style="margin: 0 0 0 0;" ng-click="newScheduler(setting.scheduler_settings)">New</button>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.scheduler_settings.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, scheduler_name) in setting.scheduler_settings" style="padding: 3px 10px;">
+            {{idx+1}}. {{scheduler_name}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.scheduler_settings.splice(idx,1)"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <span class="pull-right">
+      <span role="success" ng-show="message.success" style="font-size: 12px;color: green;"><span class="fa fa-check-circle-o"></span> {{message.success}}&emsp;</span>
+      <span role="error" ng-show="message.error" style="font-size: 12px;color: red;"><span class="fa fa-times-circle-o"></span> {{message.error}}&emsp;</span>
+      <button type="submit" class="btn btn-md btn-danger" ng-click="save()"><span class="fa fa-save"></span> SAVE</button>
+    </span>
+
+  </div>
+</section>

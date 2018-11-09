@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+    <span class="fa fa-close" aria-hidden="true" style="margin: 8px 8px 0 0"></span>
+  </button>
+  <h3 class="modal-title"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Create Self-Initiated Task&nbsp;&nbsp;<span style="font-size: 16px">(NetID: {{data.user.username}})</span></h3>
+</div>
+
+<div class="modal-body" style="padding-bottom: 0;">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Task detail:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="data.sitask.description"></textarea>
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="sub-title" style="font-size: 16px;">Message display to <u>customer</u>:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="data.sitask.msg_DisplayCustomer"></textarea>
+
+      <div ng-show="notifyCustomer">
+        <div class="sub-title" style="font-size: 16px; margin-top: 100px;">Notification to <u>customer</u>:</div><hr style="margin: 3px 0 8px 0"/>
+        <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="data.sitask.msg_NotifyCustomer"></textarea>
+      </div>
+
+      <div class="form-inline">
+        <b>Actions:</b>&emsp;
+        <div class="checkbox3 checkbox-inline checkbox-light checkbox-check" style="margin-top: 10px">
+          <input type="checkbox" id="to_customer" disabled="disabled" ng-model="notifyCustomer"><label for="to_customer" style="text-decoration: line-through">Notify Customer</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="sub-title" style="font-size: 16px;">Message display to <u>technician</u>:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="data.sitask.msg_DisplayTechnician"></textarea>
+
+      <div ng-show="createChore">
+        <div class="sub-title" style="font-size: 16px; margin-top: 100px;">Chore instruction:</div><hr style="margin: 3px 0 8px 0"/>
+        <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="data.chore.instruction"></textarea>
+      </div>
+
+      <div class="form-inline">
+        <b>Actions:</b>&emsp;
+        <div class="checkbox3 checkbox-inline checkbox-light checkbox-check" style="margin-top: 10px">
+          <input type="checkbox" id="create_chore" ng-model="createChore"><label for="create_chore">Create Chore</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer" style="padding: 10px 10px 0 0; margin: 0 0 10px 0; border-top: 0px;">
+  <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>&nbsp;
+  <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="create()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create</button>
+</div>
+

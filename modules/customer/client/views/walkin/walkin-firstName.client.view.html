@@ -1,0 +1,13 @@
+ <section class="walkin-text-content" ng-controller="CustomerWalkinCustomerController" ng-init="status.error=undefined">
+  <div class="walkin-field-content">
+    <p class="walkin-field-label-left">First name:</p>
+    <input type="text" class="form-control walkin-text-input" ng-model="walkin.user.firstName">
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-default" ui-sref="customer.walkin.netid">
+      <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back</button>
+    <button class="btn btn-md btn-primary" ng-click="toLastName()">
+      Next&nbsp;&nbsp;<i class="fa fa-arrow-circle-right"></i></button>
+  </footer>
+</section>

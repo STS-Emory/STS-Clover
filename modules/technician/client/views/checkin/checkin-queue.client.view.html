@@ -1,0 +1,299 @@
+<section ng-controller="CheckinQueueController" ng-init="init()">
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="max-width: 400px; margin-bottom: 2em;">
+    <div style="height: 40vh;">
+      <div class="card card-info" style="margin-bottom: 2em;">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="title">
+              <i class="fa fa-wrench"></i>&nbsp;&nbsp;Repair in Progress
+            </div>
+          </div>
+        </div>
+        <div class="card-body no-padding" style="overflow: auto; max-height: 30vh;">
+          <div class="alert text-center" style="margin-bottom: 0px;" ng-hide="queues.working.length > 0">
+            <span class="fa fa-smile-o"></span> Hooray! Nothing in the queue! <span class="fa fa-smile-o"></span>
+          </div>
+          <table class="table table-hover" style="margin-bottom: 0px;" ng-show="queues.working && queues.working.length > 0">
+            <thead><tr>
+              <th>CI #</th><th></th><th>Customer Name</th>
+            </tr></thead>
+            <tbody>
+            <tr ng-repeat="checkin in queues.working | orderBy:'created'"
+                ng-click="loadCheckin(checkin);" ng-class="selected._id==checkin._id?'selected-checkin':''">
+              <th scope="row" style="width: 55px;">&nbsp;{{ checkin._id }}</th>
+              <td style="width: 20px;">
+                <i class="fa fa-wrench" tooltip-placement="top" tooltip-append-to-body="true"
+                   uib-tooltip="Work in progress" ng-show="checkin.status==='Work in progress'"></i>
+                <i class="fa fa-eye" tooltip-placement="top" tooltip-append-to-body="true"
+                   uib-tooltip="Verification pending" ng-show="checkin.status==='Verification pending'"></i>
+              </td>
+              <td>{{ checkin.user.displayName }}
+              <span class="fa fa-clock-o pull-right" tooltip-placement="left" tooltip-append-to-body="true"
+                    uib-tooltip="{{ (checkin.created | date: 'short') || 'N/A' }}"></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <hr style="margin: 0 0 10px 0;"/>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 40vh;">
+      <div class="card card-success">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="title">
+              <i class="fa fa-archive"></i>&nbsp;&nbsp;Pending Repairs
+            </div>
+          </div>
+        </div>
+        <div class="card-body no-padding" style="overflow: auto; max-height: 30vh;">
+          <div class="alert text-center" style="margin-bottom: 0px;" ng-hide="queues.pending.length > 0">
+            <span class="fa fa-smile-o"></span> Hooray! Nothing in the queue! <span class="fa fa-smile-o"></span>
+          </div>
+          <table class="table table-hover" style="margin-bottom: 0px;" ng-show="queues.pending && queues.pending.length > 0">
+            <thead><tr>
+              <th>CI #</th><th></th><th>Customer Name</th>
+            </tr></thead>
+            <tbody>
+            <tr ng-repeat="checkin in queues.pending | orderBy:'created'"
+                ng-click="loadCheckin(checkin);" ng-class="selected._id==checkin._id?'selected-checkin':''">
+              <th scope="row" style="width: 55px;">&nbsp;{{ checkin._id }}</th>
+              <td style="width: 20px;">
+                <i class="fa fa-hourglass-start" tooltip-placement="top" tooltip-append-to-body="true"
+                   uib-tooltip="User action pending" ng-show="checkin.status==='User action pending'"></i>
+                <i class="fa fa-check" tooltip-placement="top" tooltip-append-to-body="true"
+                   uib-tooltip="Checkout pending" ng-show="checkin.status==='Checkout pending'"></i>
+              </td>
+              <td>{{ checkin.user.displayName }}
+                <span class="fa fa-clock-o pull-right" tooltip-placement="left" tooltip-append-to-body="true"
+                      uib-tooltip="{{ (checkin.created | date: 'short') || 'N/A' }}"></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <hr style="margin: 0 0 10px 0;"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="height: 80vh; padding: 0;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="{{(!selected)? 'position: relative; top: 40%;' : ''}}">
+      <!-- If no check-in instance is selected -->
+      <div style="text-align: center;" ng-hide="selected"><hr/>
+        <b style="font-size: 18px;"><span class="fa fa-info-circle"></span> Please select an instance in the queue for detail.</b>
+      <hr/></div>
+
+      <!-- If a check-in instance is selected  -->
+      <div class="card" ng-show="selected">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="title">
+              <i class="fa fa-info"></i>&emsp; Check-in Information
+            </div>
+          </div>
+          <div class="pull-right" style="font-size: 16px; margin: 10px 5px 0 0;">
+            <span class="label" ng-class="'label-' + (selected.status.endsWith('pending')? 'info' : 'success')">
+              {{ selected.status }}
+            </span>
+          </div>
+        </div>
+        <div class="card-body no-padding">
+          <div role="tabpanel">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation"><a href="#general" role="tab" data-toggle="tab">General</a></li>
+              <li role="presentation" class="active"><a href="#tasks" role="tab" data-toggle="tab">Tasks</a></li>
+              <li role="presentation"><a href="#template" role="tab" data-toggle="tab">Template</a></li>
+              <li class="pull-right">
+                <div class="dropdown" style="position: absolute; right: 15px; top: 4px; z-index: 999;">
+                  <a class="btn btn-sm btn-warning" data-toggle="dropdown" style="margin-top: 0;" role="button" aria-haspopup="true" aria-expanded="false">
+                    Options &emsp;<span class="fa fa-caret-down"></span>
+                  </a>
+                  <ul class="dropdown-menu" style="text-align: left; left: -100px;">
+                    <li class="dropdown-header" style="margin-left: -5px;">Status changes</li>
+                    <li style="margin-left: 5px;" ng-show="selected.status==='User action pending' || selected.status==='Verification pending'">
+                      <a href="#" ng-click="changeStatus('Work in progress')"><span class="fa fa-wrench"></span>&nbsp;&nbsp;Work in progress</a></li>
+                    <li style="margin-left: 5px;" ng-show="selected.status==='Work in progress'">
+                      <a href="#" ng-click="changeStatus('User action pending')"><span class="fa fa-user"></span>&nbsp;&nbsp;Customer pending</a></li>
+                    <li style="margin-left: 5px;" ng-show="selected.status==='Work in progress'">
+                      <a href="#" ng-click="changeStatus('Verification pending')"><span class="fa fa-eye"></span>&nbsp;&nbsp;Verification ready</a></li>
+                    <li style="margin-left: 5px;" ng-show="selected.status==='Verification pending'&&selected.completionTechnician&&selected.completionTechnician.username!==technician.username">
+                      <a href="#" ng-click="changeStatus('Checkout pending')"><span class="fa fa-thumbs-o-up"></span>&nbsp;&nbsp;Checkout ready</a></li>
+                    <li style="margin-left: 5px;" ng-show="selected.status==='Checkout pending'">
+                      <a href="#" ng-click="checkout()"><span class="fa fa-sign-out"></span>&nbsp;&nbsp;Checkout</a></li>
+                    <li class="dropdown-header" style="margin-left: -5px;">Other functions</li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="recordCall()"><span class="fa fa-phone"></span>&nbsp;&nbsp;Record Calls</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="sendEmail()"><span class="fa fa-mail-forward"></span>&nbsp;&nbsp;Customized Email</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="printLabel()"><span class="fa fa-print"></span>&nbsp;&nbsp;Print Device Label</a></li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="max-height: 70vh; overflow: auto;">
+            <div class="tab-content" style="max-height: 65vh; overflow: auto;">
+
+              <div role="tabpanel" id="general" class="tab-pane col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                <div class="sub-title" style="padding:0; margin-bottom: 5px;">Customer information</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 0;">
+                  <div class="form-group">
+                    <label for="username">NetID:</label>
+                    <div id="username">{{selected.user.username}}</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <div id="phone">{{selected.user.phone}}</div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding: 0;">
+                  <div class="form-group">
+                    <label for="displayName">Name:</label>
+                    <div id="displayName">{{selected.user.displayName}}</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="location">Location:</label>
+                    <div id="location">{{selected.user.location}}</div>
+                  </div>
+                </div>
+
+                <div class="sub-title" style="padding: 0; margin-bottom: 5px;">Device information</div>
+                <div class="form-group">
+                  <label for="dspecs">Device Specs:</label>
+                  <div id="dspecs">{{selected.deviceManufacturer + ' ' + selected.deviceModel}}</div>
+                </div>
+                <div class="form-group">
+                  <label for="os">OS Specs:</label>
+                  <div id="os"> {{selected.walkin.deviceInfo}}
+                    {{(selected.deviceInfoOS.length > 0)? ' (' + selected.deviceInfoOS.join(', ') + ')' : ''}}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="userpwd">User / Password:</label>
+                  <div id="userpwd">{{selected.deviceInfoUser + ' / ' + selected.deviceInfoPwd}}</div>
+                </div>
+                <div class="form-group">
+                  <label for="items">Item Received:</label>
+                  <div id="items" onaftersave="updateCheckin();logService('Update list of received items', 'Normal');"
+                    editable-select="selected.itemReceived" e-multiple e-ng-options="item as item for item in setting.checkin_items">
+                    {{selected.itemReceived.join(', ')}}</div>
+                </div>
+              </div>
+
+              <div role="tabpanel" id="tasks" class="tab-pane active col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                <div class="sub-title" style="padding:0; margin-bottom: 5px;">Task specifications
+                  <span class="pull-right" style="margin: -8px 5px 0 0;">
+                    <button class="btn btn-xs btn-primary" ng-click="viewWalkin()">View Walk-in</button>
+                  </span>
+                </div>
+                <div class="form-group">
+                  <label for="reformat">Reformat Allowed:</label>
+                  <div id="reformat" style="text-align: justify; font-weight: bold; color: red;" edit-disabled="{{user.isAdmin==false}}" editable-radiolist="selected.reformatConsent"
+                    onaftersave="updateReformatConsent()" e-ng-options="opt.value as opt.text for opt in [{ value : 'true', text : 'YES' }, { value : 'false', text : 'NO' }]">
+                    {{selected.reformatConsent? 'YES' : 'NO' }}</div>
+                </div>
+                <div class="form-group">
+                  <label for="preDiag">Preliminary Diagnostics:</label>
+                  <p id="preDiag" style="text-align: justify">{{selected.preDiagnostic}}</p>
+                </div>
+                <div class="form-group">
+                  <label for="sugAct">Suggested Actions:</label>
+                  <p id="sugAct" style="text-align: justify">{{selected.suggestedAction}}</p>
+                </div>
+              </div>
+
+              <div role="tabpanel" id="template" class="tab-pane col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:10px; padding: 0;">
+                <div class="sub-title" style="padding:0; margin-bottom: 5px;">Template selection</div>
+                <div class="row" style="margin: 10px 0 20px 0; text-align: left;">
+                  <select id="templates" style="width: 100%" ng-model="templateViewing" ng-change="updateTemplateTasks()">
+                    <option value="N/A">N/A</option>
+                    <option ng-repeat="template in setting.templates" value="{{template.name}}">{{template.name}}</option>
+                  </select>
+                </div>
+                <div ng-show="setting.templateTasks && setting.templateTasks.length > 0">
+                  <div class="sub-title" style="padding: 0; border-bottom: 0; margin: 10px 0 0 0;">
+                    Template tasks
+                    <span class="pull-right" ng-show="selected.templateApplied!==templateViewing">
+                      <button class="btn btn-xs btn-warning" style="margin: -4px 5px 0 0;"
+                        ng-click="applyTemplate()">Apply</button>
+                    </span>
+                  </div>
+                  <table class="table table-hover" style="margin: 2px 0 0 0; word-break: break-all;">
+                    <tbody>
+                    <tr ng-repeat="task in setting.templateTasks">
+                      <td>{{task}}</td>
+                      <td style="width: 20px;"><i class="fa fa-plus" ng-show="showTemplateImport(task)"
+                        ng-click="logService(task, 'Normal')"></i></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="max-height: 70vh; overflow: auto;">
+            <div class="sub-title" style="margin-bottom: 0; border-bottom: 0;">
+                &nbsp;<i class="fa fa-book"></i>&nbsp;&nbsp;Service records
+                <span class="label label-primary pull-right" ng-show="selected.templateApplied && selected.templateApplied !== 'N/A'"
+                  style="margin: 2px 6px 0 0;">Template applied</span>
+            </div>
+
+            <div class="row" style="height: 55vh; overflow: auto; margin-bottom: 60px;">
+              <span style="margin-left: 2em;" ng-hide="selected && selected.serviceLog && selected.serviceLog.length > 0">None</span>
+              <table class="table table-hover" style="margin-left: 2em; margin-bottom: 0px; width: 90%;"
+                     ng-show="selected && selected.serviceLog && selected.serviceLog.length > 0">
+                <tbody>
+                  <tr ng-repeat="log in selected.serviceLog">
+                    <th style="width: 20px;">
+                      <i class="fa fa-exclamation-circle" ng-show="log.type==='Important'"
+                         tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Important"></i>
+                      <i class="fa fa-comment" ng-show="log.type==='Note'"
+                         tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Note"></i>
+                    </th>
+                    <td editable-text="log.description" ng-style="getLogStyle(log.type)" onaftersave="updateLog(log)"
+                        edit-disabled="disableEditing(log.createdBy.username, log.createdAt)">{{log.description}}</td>
+                    <td style="width: 120px;"><i class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true"
+                      uib-tooltip="{{log.createdBy.displayName}}"></i> {{log.createdAt | date : 'M/d h:mma'}}</td>
+                    <td style="width: 20px;"><i class="fa fa-times" ng-show="showRemoval(log.createdBy.username, log.createdAt)"
+                      ng-click="removeLog(log)" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Remove"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <form class="row" style="position: absolute; bottom: 10px; width: 100%;">
+              <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" style="margin-bottom: 0px;">
+                <input type="text" class="form-control" ng-model="record">
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="margin-bottom: 0px; padding: 0;">
+                <div class="btn-group dropup" uib-dropdown>
+                  <button type="submit" class="btn btn-sm btn-primary" style="margin: 2px 0 2px 0;"
+                    ng-click="logService(record, 'Normal')">Log</button>
+                  <button class="btn btn-sm btn-primary" style="margin: 2px 0 2px 0;" uib-dropdown-toggle>
+                    <span class="fa fa-caret-up"></span>
+                  </button>
+                  <ul class="dropdown-menu" uib-dropdown-menu role="menu" style="left: -100px;">
+                    <li ng-click="logService(record, 'Important')">
+                      <a href="#"><i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Important</a>
+                    </li>
+                    <li ng-click="logService(record, 'Note')">
+                      <a href="#"><i class="fa fa-comment"></i>&nbsp;&nbsp;Note</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Toggle Select2 select box -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('select').select2({ minimumResultsForSearch: Infinity });
+  });
+</script>

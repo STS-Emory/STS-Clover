@@ -1,0 +1,155 @@
+<section ng-controller="TaskCenterController" ng-init="init()">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+    <div class="card card-warning">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="title">
+            <i class="fa fa-gears"></i>&nbsp;&nbsp;STS Tasks
+          </div>
+        </div>
+
+        <div class="pull-right title" style="font-size: 16px; margin: 15px -15px 0 0; padding: 0;">
+          <div class="form-group">
+            <i class="col-lg-2 col-md-2 col-sm-2 fa fa fa-search" style="margin-top: 5px;"></i>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="">
+              <input type="text" class="form-control" style="height: 28px; width: 80px" placeholder="  NetID" ng-model="sitask_netid">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body no-padding" style="overflow: auto; max-height: 70vh;">
+        <div class="alert text-center" style="margin-bottom: 0px;" ng-show="sitasks && !sitasks.length">
+          <span class="fa fa-smile-o"></span> Hooray! No tasks for you! <span class="fa fa-smile-o"></span>
+        </div>
+        <table class="table table-hover" style="margin-bottom: 0; " ng-show="sitasks && sitasks.length">
+          <thead><tr>
+            <th style="width: 90px; text-align: center;">NetID</th>
+            <th style="text-align: left; padding-left: 0;">Task Description</th>
+            <td style="width: 80px"></td>
+          </tr></thead>
+          <tbody>
+
+          <tr ng-repeat="sitask in sitasks">
+            <td style="text-align: center; line-height: 38px; padding: 0;">{{ sitask.username }}</td>
+            <td style="padding: 0; line-height: 38px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;">
+              {{ sitask.description }}
+            </td>
+            <td style="text-align: center">
+              <button class="btn btn-xs btn-primary" style="margin: 0" ng-click="viewSITask(sitask);">View</button>
+              <button ng-show="!sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="createSITaskChore($index, sitask)"
+                      tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Create Chore">
+                <i class="fa fa-tasks"></i></button>
+              <button ng-show="sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="viewWalkin(sitask.walkin)"
+                      tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="View Walk-in">
+                <i class="fa fa-info-circle"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr style="margin-top: 0; margin-bottom: 8px;" />
+    </div>
+  </div>
+
+  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="title">
+            <i class="fa fa-tasks"></i>&nbsp;&nbsp;Chores
+          </div>
+        </div>
+
+        <div class="pull-right" style="margin-top: 3px; text-align: right; width: 600px;">
+          <span class="col-lg-7 col-md-7 col-sm-7" style="padding: 0 10px 0 0;">
+            <div class="btn btn-sm btn-info" ng-click="listChores_yesterday()">Yesterday</div>
+            <div class="btn btn-sm btn-success" ng-click="listChores_today()">Today</div>
+            <div class="btn btn-sm btn-danger" ng-click="listChores_incomplete()">Incomplete</div>
+          </span>
+          <span class="col-lg-5 col-md-5 col-sm-5" style="padding: 3px 10px 0 0;">
+            <input type="date" class="form-control col-lg-9 col-md-9 col-sm-9" style="width: 160px;" ng-model="chore_date">
+            <button class="btn btn-sm btn-default col-lg-3 col-md-3 col-sm-3" style="margin: 2px 0 0 10px;" ng-click="listChores_dateQuery(chore_date)">Search</button>
+          </span>
+        </div>
+      </div>
+      <div class="card-body no-padding" style="overflow: auto; max-height: 70vh;">
+        <div class="alert text-center" style="margin-bottom: 0px;" ng-show="chores && !chores.length">
+          <span class="fa fa-smile-o"></span> Hooray! No chores found! <span class="fa fa-smile-o"></span>
+        </div>
+
+        <table class="table table-hover" style="margin-bottom: 0; " ng-show="chores && chores.length">
+          <thead><tr>
+            <th style="width: 30px;"></th>
+            <th style="padding-left: 0;">Task Instruction</th>
+            <td style="width: 280px;"></td>
+          </tr></thead>
+
+          <tbody>
+            <tr ng-repeat="chore in chores" style="height: 45px;">
+              <td style="text-align: center">
+                <!--<i class="fa fa-star" style="font-size: 10px; line-height: 20px;" tooltip-append-to-body="true"-->
+                   <!--tooltip-placement="top" uib-tooltip="Urgent"></i>-->
+              </td>
+              <td style="padding: 0; line-height: 43px;">{{chore.instruction}} </td>
+
+              <td style="text-align: right; font-size: 10px;">
+
+                <span ng-show="!chore.edit && !chore.completed" style="line-height: 28px;">
+                  <span style="margin-right: 0.5em; margin-top: 5px;">
+                    <i class="fa fa-user" tooltip-append-to-body="true" tooltip-placement="right"
+                       uib-tooltip="Created by {{chore.createdBy.displayName}}"></i>&nbsp;
+                    <span style="color: gray;">
+                      <span>{{chore.created | date : 'short'}}</span>
+                    </span>
+                  </span>
+
+                  <button class="btn btn-xs btn-primary" style="margin: 0;" ng-show="!chore.completed" ng-click="chore.edit=true">Complete</button>
+                </span>
+
+                <span ng-show="!chore.edit && chore.completed">
+                  <div class="form-horizontal">
+                      <div class="form-group" style="margin: 0;">
+                        <div class="col-lg-10 col-md-10 col-sm-10">
+                          <span style="margin-right: 0.5em; margin-top: 5px;">
+                            <i class="fa fa-user" tooltip-append-to-body="true" tooltip-placement="right"
+                               uib-tooltip="Created by {{chore.createdBy.displayName}}"></i>&nbsp;
+                            <span style="color: gray;">
+                              <span>{{chore.created | date : 'short'}}</span>
+                            </span>
+                          </span>
+                          <span style="margin-right: 3px;"><br>
+                            <i class="fa fa-user" tooltip-append-to-body="true" tooltip-placement="right"
+                               uib-tooltip="Completed by {{chore.completedBy.displayName}}"></i>&nbsp;
+                            <span style="color: gray;">
+                              <span>{{chore.completed | date : 'short'}}</span>
+                            </span>
+                          </span>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2" style="padding: 0; text-align: left;">
+                          <button class="btn btn-xs btn-default" style="margin-bottom: 0;" ng-show="chore.completed" ng-click="showChoreNote($index)">Note</button>
+                        </div>
+                      </div>
+                    </div>
+                </span>
+
+                <span ng-show="chore.edit">
+                  <div class="form-horizontal" style="font-size: 10px;">
+                      <div class="form-group" style="text-align: left; margin: 0;">
+                        <div class="col-lg-10 col-md-10 col-sm-10">
+                          <input type="text" class="form-control" style="height:22px; width: 200px" placeholder="Work note (required)" ng-model="chore.note">
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2" style="padding: 0;">
+                          <button class="btn btn-xs btn-primary" style="margin: 0;" ng-click="completeChore($index)">Log</button>
+                        </div>
+                      </div>
+                    </div>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr style="margin-top: 0; margin-bottom: 8px;" />
+    </div>
+  </div>
+</section>

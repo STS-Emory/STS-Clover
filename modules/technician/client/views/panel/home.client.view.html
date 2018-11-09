@@ -1,0 +1,141 @@
+<section ng-controller="TechHomeController" ng-init="init()">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card title" style="background-color: lightslategray; color: white; height: 58px;">
+          <h2 style="margin: 14px 0px 10px 20px; font-family: 'Roboto', sans-serif;">Technician Panel</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <a href="#" ui-sref="tech.walkin.queue">
+          <div class="card red summary-inline">
+            <div class="card-body">
+              <i class="icon fa fa-4x" ng-class=
+                "stats.walkin.queue >= 10? 'fa-frown-o':(stats.walkin.queue >= 5? 'fa-meh-o':'fa-smile-o')"></i>
+              <div class="content">
+                <div class="title">{{stats.walkin.queue}}</div>
+                <div class="sub-title">Customer Waiting</div>
+              </div>
+              <div class="clear-both"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <a href="#" ui-sref="tech.walkin.list">
+          <div class="card yellow summary-inline">
+            <div class="card-body">
+              <i class="icon fa fa-male fa-4x"></i>
+              <div class="content">
+                <div class="title">{{stats.walkin.today}}</div>
+                <div class="sub-title">Total Visit of the Day	</div>
+              </div>
+              <div class="clear-both"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <a href="#" ui-sref="tech.checkin.queue">
+          <div class="card blue summary-inline">
+            <div class="card-body">
+              <i class="icon fa fa-stethoscope fa-4x"></i>
+              <div class="content">
+                <div class="title">{{stats.checkin.queue}}</div>
+                <div class="sub-title">Current Check-ins</div>
+              </div>
+              <div class="clear-both"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <a href="#" ui-sref="tech.checkin.list">
+          <div class="card green summary-inline">
+            <div class="card-body">
+              <i class="icon fa fa-thumbs-up fa-4x"></i>
+              <div class="content">
+                <div class="title">{{stats.checkin.month}}</div>
+                <div class="sub-title">Monthly Total Repair</div>
+              </div>
+              <div class="clear-both"></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="title"><i class="fa fa-link"></i> Useful Links</div>
+        </div>
+        <div class="clear-both"></div>
+      </div>
+      <div class="card-body no-padding">
+        <div class="list-group">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdYSaU_P-_NEXxd9q6f5UuvzYbOKivWQqzTZirMzUT9sJFsgg/viewform?usp=sf_link" target="_blank" class="list-group-item">
+            Opening Checklist
+          </a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSe62iNK0x6c7n0HUQ6wqIWm0MiTNmQw8OFrsecSK_5Eov7RfA/viewform?usp=sf_link" target="_blank" class="list-group-item">
+            Closing Checklist
+          </a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeCnVudfORkx53EL2IwtJP4XBvBIueh8jxald8712NlFFMz3w/viewform?usp=sf_link" target="_blank"  class="list-group-item">
+            Student Production Studio Checklist
+          </a>
+          <a href="https://sdl-resource-scheduler.emory.edu/admin/spaces" target="_blank"  class="list-group-item">
+            Student Production Studio Calendar (Editable)
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="card card-info">
+      <div class="card-header" style="background-color: #7b68ee;">
+        <div class="card-title">
+          <div class="title"><i class="fa fa-comments-o"></i> Messages</div>
+        </div>
+        <div class="clear-both"></div>
+      </div>
+      <div class="card-body no-padding">
+        <ul class="message-list" style="max-height: 65vh; overflow: auto;">
+          <li ng-show="!messages || messages.length == 0">
+            <div class="message" style="margin-left: 2em;">No message found.</div>
+          </li>
+          <li ng-repeat="message in messages | orderBy: '-created'">
+            <span class="fa fa-chevron-right profile-img pull-left" ng-show="!message.read"
+                  style="width: 20px; text-align: center; padding-top: 14px; font-size: 10px;"></span>
+            <div class="message-block" style="padding-left: 24px;">
+              <span class="username">{{message.from.displayName}}</span>
+
+              <span class="pull-right" style="height: 60px; width: 15%; text-align: right;">
+                <span class="message-datetime">{{message.created | date : 'short'}}</span>
+                <span class="btn btn-xs btn-default" style="margin: 12px 3px 0 0;"
+                      ng-show="!message.read" ng-click="makeAsRead(message)">Mark as read</span>
+                <span class="message-datetime" ng-show="message.read" tooltip-append-to-body="true"
+                      tooltip-placement="left" uib-tooltip="{{message.read | date : 'short'}}">read</span>
+              </span>
+
+              <div class="message" style="width: 85%; text-align: justify">{{message.message}}</div>
+            </div>
+          </li>
+        </ul>
+        <!-- <div class="row"> -->
+        <form class="col-lg-12 col-md-12 col-sm-12">
+          <div class="col-lg-10 col-md-10 col-sm-8" style="margin-top: 5px; margin-bottom: 5px;">
+            <input type="text" class="form-control" placeholder="Type your message here" ng-model="inputMessage">
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-4">
+            <button type="submit" class="btn btn-default" style="width: 105%" ng-click="newMessage()">Post</button>
+          </div>
+        </form>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</section>

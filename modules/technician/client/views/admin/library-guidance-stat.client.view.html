@@ -1,0 +1,31 @@
+<section ng-controller="StatisticsController" ng-init="initLibraryGuidanceStat()">
+  <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 card-body" style="margin-bottom: 1em;">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+      <h3 style="margin-top:0px">Yearly Statistics</h3>
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+      <form class="form-inline pull-right">
+        <div class="form-group">
+          <label for="year">View statistics for year:&emsp;</label>
+          <input type="text" class="form-control" id="year" placeholder="Input year for statistics" ng-model="year">
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="initLibraryGuidanceStat()">View</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+      <canvas id="LibraryGuidanceBarChart" width="4" height="2"></canvas>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      <h4>Overall Statistics</h4>
+      <table class="table table-hover">
+        <tr><th>Task Name</th><th>Count</th></tr>
+        <tr data-ng-repeat="category in CategoryTotal" data-ng-href="#">
+          <td><i>{{category.label}}</i></td><td>{{category.count}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>

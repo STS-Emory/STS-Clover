@@ -1,0 +1,13 @@
+<section class="walkin-text-content" ng-controller="CustomerWalkinNetIDController" ng-init="status.error=undefined">
+  <div class="walkin-field-content">
+    <p class="walkin-field-label">Please enter your NetID</p>
+    <input type="text" class="form-control walkin-text-input" ng-model="walkin.user.username">
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-default" ui-sref="customer.home">
+      <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back</button>
+    <button class="btn btn-md btn-primary" ng-click="validate()">
+      Next&nbsp;&nbsp;<i class="fa fa-arrow-circle-right"></i></button>
+  </footer>
+</section>

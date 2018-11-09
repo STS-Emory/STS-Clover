@@ -1,0 +1,15 @@
+<section ng-controller="CustomerWalkinDeviceController" ng-init="status.error=device_specs=undefined;">
+  <div class="walkin-list-content">
+    <p class="walkin-field-label-left">Device type:</p>
+    <button class="btn btn-block btn-primary" ng-click="selectComputer()">Computer</button>
+    <button ng-repeat="doption in setting.device_options" class="btn btn-block btn-primary"
+      ng-click="selectDevice(doption.key, doption.values)">{{doption.key}}</button>
+    <button class="btn btn-block btn-primary" ng-click="selectOther()">Other</button>
+
+    <footer class="walkin-nav-buttons">
+      <button class="btn btn-md btn-default" ui-sref="customer.walkin.location">
+        <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back
+      </button>
+    </footer>
+  </div>
+</section>

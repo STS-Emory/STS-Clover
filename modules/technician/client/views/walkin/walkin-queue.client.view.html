@@ -1,0 +1,318 @@
+<section id="WalkinQueueSection" ng-controller="WalkinQueueController" ng-init="init()">
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="max-width: 400px; margin-bottom: 2em;">
+    <div class="card card-info">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="title">
+            <i class="fa fa-male"></i>&nbsp;&nbsp;Customer Waiting
+          </div>
+        </div>
+        <span class="pull-right title" ng-click="initWalkin()">
+          <i class="fa fa-refresh" style="font-size: 20px; margin-top: 12px; margin-right: 10px;"
+             tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Refresh"></i>
+        </span>
+      </div>
+      <div class="card-body no-padding" style="overflow: auto; max-height: 65vh;">
+        <div class="alert text-center" style="margin-bottom: 0px;" ng-hide="walkins.length > 0">
+          <span class="fa fa-smile-o"></span> Hooray! Nothing in the queue! <span class="fa fa-smile-o"></span>
+        </div>
+        <table class="table table-hover" ng-show="walkins && walkins.length > 0" style="margin-bottom: 0; ">
+          <thead><tr>
+            <th>Order</th><th>Customer Name</th>
+          </tr></thead>
+          <tbody>
+            <tr ng-repeat="walkin in walkins" ng-click="loadWalkin(walkin);">
+              <th scope="row">&nbsp;{{ $index + 1 }}
+                <span class="fa fa-wrench pull-right" ng-show="walkin.status === 'Work in progress'" tooltip-append-to-body="true"
+                      tooltip-placement="top" uib-tooltip="Helped by {{ walkin.serviceTechnician.displayName }}"></span>
+                <span class="fa fa-home pull-right" ng-show="walkin.status === 'House call pending'"
+                      tooltip-placement="top" uib-tooltip="House call pending"tooltip-append-to-body="true"></span>
+                <span class="fa fa-copy pull-right" ng-show="walkin.status === 'Duplicate'"
+                      tooltip-placement="top" uib-tooltip="Duplicate"tooltip-append-to-body="true"></span>
+              </th>
+              <td>
+                {{ walkin.user.displayName }}
+                <span class="fa fa-clock-o pull-right" tooltip-placement="left" tooltip-append-to-body="true"
+                      uib-tooltip="{{ (walkin.created | date: walkin.status === 'House call pending'? 'short' : 'shortTime') || 'N/A' }}"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr style="margin-top: 0;" />
+      <div class="pull-right" style="margin: -15px 10px 5px 0;">
+        Avg. wait/work time: <b>{{avgWaitTime}}</b> / <b>{{avgWorkTime}}</b> min
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="height: 80vh; padding: 0;">
+    <!-- Alert messages -->
+    <div class="alert alert-danger alert-dismissible fade in" role="alert" ng-show="selected && selected.sitask && selected.flagged && (selected.status === 'In queue' || selected.status == 'Duplicate')">
+      <button type="button" class="btn btn-xs btn-danger pull-right" style="margin: 0 0 0 0;" ng-click="selected.flagged=false;">Got it !</button>
+      <h4><span class="fa fa-flag"></span>&emsp; Oh snap! Customer has been flagged!</h4>
+      <p>{{selected.sitask.msg_DisplayTechnician}}</p>
+    </div>
+    <!-- Warning messages -->
+    <div class="alert alert-warning alert-dismissible fade in" role="alert" ng-show="selected && selected.unverified && (selected.status === 'In queue' || selected.status == 'Duplicate')">
+      <div class="pull-right" style="margin: 0 -15px 0 0;">
+        <button type="button" class="btn btn-sm btn-primary" ng-click="selected.unverified=false;">Proceed</button>
+        <button class="btn btn-sm btn-default" ng-click="notEligible()">Not Eligible</button>
+      </div>
+      <h4><span class="fa fa-hand-stop-o"></span>&emsp; Oh no! Customer status is not verified!</h4>
+      <p>The NetID customer input is not verified by the system. Please make sure he/she is a student at Emory.</p>
+    </div>
+    <!-- Start of workspace -->
+    <div class="pull-right" ng-show="selected && (selected.status === 'In queue' || selected.status === 'Duplicate')">
+      <button class="btn btn-sm btn-default" ng-click="noshow()">No Show</button>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+         style="{{(!selected || selected.status === 'In queue'|| selected.status === 'Duplicate')? 'position: absolute; top: 35%;' : ''}}">
+      <!-- If no walk-in instance is selected -->
+      <div style="text-align: center;" ng-hide="selected"><hr/>
+        <b style="font-size: 18px;"><span class="fa fa-info-circle"></span> Please select an instance in the queue for detail.</b>
+      <hr/></div>
+      <!-- If the walk-in instance is 'In queue' -->
+      <div style="text-align: center;" ng-show="selected && (selected.status === 'In queue' || selected.status === 'Duplicate')">
+        <p style="font-size: 28px;"><b>{{selected.user.displayName}}</b></p>
+        <p style="font-size: 14px;">-- {{!selected.deviceInfo? selected.deviceCategory : selected.deviceCategory + ' (' + selected.deviceInfo +')'}} --</p>
+        <p style="font-size: 14px;"></p>
+        <p style="font-size: 14px;"><i>{{selected.description}}</i></p>
+        <hr/>
+        <div><button class="btn btn-lg btn-success" ng-disabled="selected.unverified || selected.flagged" ng-click="beginService()">Begin Service</button></div>
+      </div>
+      <!-- If the walk-in is 'Work in progress'/'House call pending'-->
+      <div class="card" ng-show="selected && (selected.status !== 'In queue' && selected.status !== 'Duplicate')">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="title">
+              <i class="fa fa-info"></i>&emsp; Walk-in Information
+            </div>
+          </div>
+          <div class="pull-right" style="font-size: 16px; margin: 10px 5px 0 0;">
+            <button class="btn btn-xs btn-danger" ng-show="selected.sitask" ng-click="viewSITask(selected.sitask)" style="margin: 0;">View STS Task</button>
+            <span class="label" ng-class="'label-' + ((selected.status === 'House call pending')? 'info' : 'success')">
+              {{ selected.status }}
+            </span>
+          </div>
+        </div>
+        <div class="card-body no-padding">
+          <div role="tabpanel">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#current" role="tab" data-toggle="tab">Current Ticket</a></li>
+              <li role="presentation" ng-click="loadPrevious()"><a href="#previous" role="tab" data-toggle="tab">Previous Visits</a></li>
+            </ul>
+            <div class="tab-content" style="max-height: 70vh; overflow: auto;">
+              <div role="tabpanel" id="current" class="tab-pane active col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                <div class="dropdown" style="position: absolute; right: 15px; top: 10px; z-index: 999;">
+                  <a class="btn btn-sm btn-warning" data-toggle="dropdown" style="margin-top: 0;" role="button" aria-haspopup="true" aria-expanded="false">
+                    Options &emsp;<span class="fa fa-caret-down"></span>
+                  </a>
+                  <ul class="dropdown-menu" style="text-align: left; left: -112px;">
+                    <li class="dropdown-header" style="margin-left: -5px;">Status changes</li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="transfer()"><span class="fa fa-wrench"></span>&nbsp;&nbsp;Check-in repair</a></li>
+                    <li style="margin-left: 5px;" ng-show="selected.status!=='House call pending'"><a href="#" ng-click="toHouseCall()"><span class="fa fa-home"></span>&nbsp;&nbsp;House call pending</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="noshow()"><span class="fa fa-frown-o"></span>&nbsp;&nbsp;No show</a></li>
+                    <li class="dropdown-header" style="margin-left: -5px;">Other functions</li>
+                    <li style="margin-left: 5px;" ng-show="selected.status=='House call pending'"><a href="#" ng-click="recordCall()"><span class="fa fa-phone"></span>&nbsp;&nbsp;Record Calls</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="duplicate()"><span class="fa fa-copy"></span>&nbsp;&nbsp;Duplicate ticket</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="reassign()"><span class="fa fa-unlink"></span>&nbsp;&nbsp;Change NetID</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="sendEmail()"><span class="fa fa-mail-forward"></span>&nbsp;&nbsp;Customized Email</a></li>
+                    <li style="margin-left: 5px;"><a href="#" ng-click="printLabel()"><span class="fa fa-print"></span>&nbsp;&nbsp;Print Device Label</a></li>
+                  </ul>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-4 col-md-4 col-sm-4 control-label">NetID:</label>
+                      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="margin-top: 8px;">{{selected.user.username}}</div>
+                    </div>
+                  </div>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-4 col-md-4 col-sm-4 control-label">Phone:</label>
+                      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="margin-top: 8px;" editable-tel="selected.user.phone" e-pattern="\d{10}" onaftersave="update()">
+                        {{ (selected.user.phone)? selected.user.phone.substring(0, 3) + '-' + selected.user.phone.substring(3, 6) + '-' + selected.user.phone.substring(6) : 'N/A'}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-4 col-md-4 col-sm-4 control-label">Device type:</label>
+                      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="margin-top: 8px;" onaftersave="selected.deviceInfo=undefined;update();"
+                           editable-select="selected.deviceCategory" e-ng-options="c.value as c.text for c in device_categories" buttons="no">
+                        {{selected.deviceCategory || 'N/A'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 control-label">Name:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;" editable-text="selected.user.displayName"
+                           onaftersave="onDisplayNameChange();update();"> {{selected.user.displayName || 'N/A'}}</div>
+                    </div>
+                  </div>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 control-label">Location:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;" onaftersave="update()" buttons="no"
+                           editable-select="selected.user.location" e-ng-options="o.value as o.text for o in location_options">
+                        {{selected.user.location || 'N/A'}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-3 col-md-3 col-sm-3 control-label">Device info:</label>
+                      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;" ng-hide="selected.deviceCategory === 'Other'" onaftersave="update()"
+                           editable-select="selected.deviceInfo" e-ng-options="o.value as o.text for o in device_options[selected.deviceCategory]" buttons="no">
+                        {{ selected.deviceInfo || 'N/A' }}
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-top: 8px;" ng-show="selected.deviceCategory === 'Other'"
+                           onaftersave="update()" editable-text="selected.otherDevice">
+                        {{ selected.otherDevice || 'N/A' }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr/>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="sub-title">
+                    Task detail
+                    <span class="pull-right">
+                      <span class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Helped by"></span>
+                        {{selected.serviceTechnician.displayName || 'N/A'}}&nbsp;&nbsp;
+                      <span class="fa fa-hourglass-start" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Service started at"></span>
+                        {{(selected.serviceStartTime | date: selected.status === 'House call pending'? 'short' : 'shortTime') || 'N/A'}}
+                    </span>
+                  </div>
+                  <div class="text-justify" style="margin: -15px 0 0 20px;">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 4px;">Problem:</label>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="margin-top: 	5px;  white-space: pre;" onaftersave="update()"
+                             editable-textarea="selected.description" e-rows="2" e-cols="80">{{selected.description || 'N/A'}}</div>
+                      </div>
+                    </div>
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 4px;">Work note:</label>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="margin-top: 5px; white-space: pre-wrap;" onaftersave="update()"
+                             editable-textarea="selected.workNote" e-rows="2" e-cols="80">{{selected.workNote || 'None'}}</div>
+                      </div>
+                    </div>
+                    <span class="pull-right" style="color: #353d47; font-size: 12px; font-family: 'Roboto Condensed', sans-serif;">
+                      Last updated by {{selected.lastUpdateTechnician.displayName}} at {{selected.updated | date: 'short' : 'shortTime'}}
+                    </span>
+                  </div>
+                  <div class="sub-title">Resolution detail</div>
+                  <div class="text-justify" style="margin: -15px 0 0 20px;">
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label" style="padding-top: 4px;">Resolution type:</label>
+                        <select class="col-lg-6 col-md-6 col-sm-6 col-xs-8" id="resolution" style="width: 461px;"
+                          ng-model="selected.resolutionType" ng-change="onResolutionChange();">
+                          <option ng-repeat="option in resolutions_options.options" value="{{option}}"
+                            ng-selected="option===resolutions_options.default">{{option}}</option>
+                        </select>
+                        <div class="checkbox3 checkbox-success checkbox-inline checkbox-check checkbox-circle checkbox-light"
+                          style="margin: 0 0 -5px 1em;" ng-show="resolutions_options[selected.resolutionType].forward">
+                          <input type="checkbox" id="forward" ng-model="selected.forward" ng-disabled="!selected.allowForward">
+                            <label for="forward">Ticket forwarding</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-horizontal" ng-show="resolutions_options[selected.resolutionType].requireSubject">
+                      <div class="form-group" style="text-align: left;">
+                        <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 6px;">Other resolution:</label>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="padding-left:0;">
+                          <input type="text" class="form-control" ng-model="selected.otherResolution"
+                                 placeholder="Please enter the subject line for other resolution.">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-horizontal" ng-show="resolutions_options[selected.resolutionType].tasks">
+                      <div class="form-group" style="text-align: left; margin-bottom: 5px;">
+                        <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 2px;">Resolution tasks:</label>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="padding-left: 0;">
+                          <span ng-repeat="task in resolutions_options[selected.resolutionType].tasks">
+                            <div class="checkbox3 checkbox-inline checkbox-check checkbox-round checkbox-light">
+                              <input type="checkbox" id="{{'task'+ ($index)}}" ng-click="onResolutionTaskClick(task)">
+                              <label for="{{'task'+ ($index)}}">{{$index+1}}. {{task}}</label>
+                            </div><br>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-horizontal">
+                      <div class="form-group" style="text-align: left;">
+                        <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 2px;">Resolution detail:</label>
+                        <textarea class="col-lg-8 col-md-8 col-sm-8 col-xs-12" rows="3" ng-model="selected.resolution"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pull-left" style="margin-top: 15px;">
+                  <button class="btn btn-md btn-default" ng-click="update()"><span class="fa fa-save"></span> SAVE</button>
+                </div>
+                <div class="pull-right" style="margin-top: 15px;">
+                  <span style="color: green;" ng-show="success"><i class="fa fa-check-circle"></i> {{success}}&emsp;</span>
+                  <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
+                  <button class="btn btn-md btn-info" ng-click="willReturn()"><span class="fa fa-sign-out"></span> WILL RETURN</button>&emsp;
+                  <button class="btn btn-md btn-success" ng-click="resolve()"><span class="fa fa-check-circle-o"></span>&nbsp;&nbsp;RESOLVED&nbsp;</button>
+                </div>
+              </div>
+
+              <div role="tabpanel" id="previous" class="tab-pane col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:10px;">
+                <div class="sub-title" style="margin-top: -20px;">Previous visits information
+                  <span style="margin-left: 2em;">
+                    <button ng-show="!loading && !selected.user.previous" ng-click="loadPrevious()"
+                            class="btn btn-xs btn-primary" style="font-size: 14px;">Load</button>
+                    <span ng-show="loading"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading...</span>
+                    <span ng-show="!loading && selected.user.previous && selected.user.previous.length == 0"
+                      class="label label-success" style="font-size: 14px;">None</span>
+                  </span>
+                </div>
+                <table class="table table-hover" style="margin-top: -20px;" ng-show="selected.user.previous && selected.user.previous.length != 0">
+                  <thead>
+                  <tr>
+                    <th>Action</th>
+                    <th>ID</th>
+                    <th>Device type</th>
+                    <th>Device info</th>
+                    <th>Status</th>
+                    <th>Resolution type</th>
+                    <th>Create at</th>
+                  </tr>
+                  </thead>
+                  <tbody ng-repeat="walkin in selected.user.previous">
+                    <tr>
+                      <td><a href="#" style="text-align: center; color: green;" ng-click="viewWalkin(walkin._id)">view</a></td>
+                      <td>{{walkin._id}}</td>
+                      <td>{{walkin.deviceCategory}}</td>
+                      <td>{{walkin.deviceInfo}}</td>
+                      <td>{{walkin.status}}</td>
+                      <td>{{walkin.resolutionType || 'N/A'}}</td>
+                      <td>{{walkin.created | date : 'short' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of right section -->
+    </div>
+  </div>
+</section>
+
+<!-- Toggle Select2 select box -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('select').select2();
+    $('editable-click').removeAttr('border-bottom', '');
+  });
+</script>

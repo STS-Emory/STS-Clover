@@ -1,0 +1,12 @@
+<section class="walkin-text-content" ng-controller="CustomerWalkinCustomerController" ng-init="status.error=undefined">
+  <div class="walkin-field-content">
+    <p class="walkin-field-label">Please confirm your NetID</p>
+    <b>{{walkin.user.username}}</b>
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-default" ui-sref="customer.walkin.netid">
+      <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back</button>
+    <button class="btn btn-md btn-primary" ui-sref="customer.walkin.first-name">Confirm</button>
+  </footer>
+</section>

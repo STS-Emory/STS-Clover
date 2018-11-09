@@ -1,0 +1,159 @@
+<section ng-init="init()">
+    <div class="modal-header">
+        <h2 class="modal-title">
+          &nbsp;<i class="fa fa-info"></i>&emsp;Walk-in Information
+          <span class="pull-right" style="font-size: 14px; font-weight: 500;">
+              <font style="font-weight: 300;">Created at </font>{{(data.walkin.created | date:'short') || 'N/A'}} <br>
+              <font style="font-weight: 300;">Updated at </font>{{(data.walkin.updated | date:'short') || 'N/A'}}
+          </span>
+        </h2>
+    </div>
+
+    <div class="modal-body" style="overflow: auto;">
+        <div class="col-md-12" style="font-size: 11.5px;">
+          <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+            <h4>General information </h4>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="netid">NetID:</label>
+                <div class="col-sm-9" id="netid" style="margin-top: 8px;">{{data.walkin.user.username}}</div>
+              </div>
+            </div>
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="name">Name:</label>
+                <div class="col-sm-9" id="name" style="margin-top: 8px;" editable-text="data.walkin.user.displayName"
+                     onaftersave="onDisplayNameChange();" edit-disabled="!user.isAdmin">
+                  {{data.walkin.user.displayName || 'N/A'}}</div>
+              </div>
+            </div>
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="deviceT">Device type:</label>
+                <div class="col-sm-9" id="deviceT" style="margin-top: 8px;" onaftersave="data.walkin.deviceInfo=undefined;" edit-disabled="!user.isAdmin"
+                     editable-select="data.walkin.deviceCategory" e-ng-options="c.value as c.text for c in device_categories">
+                  {{data.walkin.deviceCategory || 'N/A'}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="phone">Phone:</label>
+                <div class="col-sm-9" id="phone" style="margin-top: 8px;" editable-tel="data.walkin.user.phone" e-pattern="\d{10}" edit-disabled="!user.isAdmin">
+                  {{ (data.walkin.user.phone)? data.walkin.user.phone.substring(0, 3) + '-' + data.walkin.user.phone.substring(3, 6) + '-' + data.walkin.user.phone.substring(6) : 'N/A'}}
+                </div>
+              </div>
+            </div>
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="location">Housing:</label>
+                <div class="col-sm-9" id="location" style="margin-top: 8px;" editable-select="data.walkin.user.location"
+                     e-ng-options="o.value as o.text for o in location_options" edit-disabled="!user.isAdmin">
+                  {{data.walkin.user.location || 'N/A'}}
+                </div>
+              </div>
+            </div>
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left">
+                <label class="col-sm-3 control-label" for="deviceI">Device info:</label>
+                <div class="col-sm-9" id="deviceI" style="margin-top: 8px;" ng-hide="data.walkin.deviceCategory === 'Other'" edit-disabled="!user.isAdmin"
+                     editable-select="data.walkin.deviceInfo" e-ng-options="o.value as o.text for o in device_options[data.walkin.deviceCategory]">
+                  {{ data.walkin.deviceInfo || 'N/A' }}
+                </div>
+                <div class="col-sm-9" id="deviceI" style="margin-top: 8px;" ng-show="data.walkin.deviceCategory === 'Other'"
+                     editable-text="data.walkin.otherDevice" edit-disabled="!user.isAdmin">
+                  {{ data.walkin.otherDevice || 'N/A' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" style="font-size: 11.5px;">
+          <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+            <h4>Task detail</h4>
+              <span class="pull-right" style="font-size: 14px; margin-top: 12px;">
+                <span class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Helped by"></span>
+                  {{data.walkin.serviceTechnician.displayName || 'N/A'}}&nbsp;&nbsp;
+                <span class="fa fa-hourglass-start" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Service started at"></span>
+                  {{(data.walkin.serviceStartTime | date: 'short') || 'N/A'}}
+              </span>
+          </div>
+            <div class="form-horizontal">
+              <div class="form-group" style="text-align: left;">
+                <label class="col-sm-3 control-label" for="problem">Problem:</label>
+                <div class="col-sm-9" id="problem" style="margin-top: 8px;">
+                  <div editable-textarea="data.walkin.description" e-rows="2" e-cols="60" edit-disabled="!user.isAdmin">
+                    {{data.walkin.description || 'N/A'}}</div>
+                </div>
+              </div>
+              <div class="form-horizontal">
+                <div class="form-group" style="text-align: left;">
+                  <label class="col-sm-3 control-label" for="workNote">Work Note:</label>
+                  <div class="col-sm-9" id="workNote" style="margin-top: 8px;">
+                    <div editable-textarea="data.walkin.workNote" e-rows="2" e-cols="60">
+                      {{data.walkin.workNote || 'None'}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="font-size: 11.5px;">
+          <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+            <h4>Resolution detail</h4>
+              <span class="pull-right" style="font-size: 14px; margin-top: 12px;">
+                <span class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Resolved by"></span>
+                  {{data.walkin.resoluteTechnician.displayName || 'N/A'}}&nbsp;&nbsp;
+                <span class="fa fa-hourglass-end" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Service ended at"></span>
+                  {{(data.walkin.resolutionTime | date: 'short') || 'N/A'}}
+              </span>
+          </div>
+            <div class="form-horizontal">
+                <div class="form-group" style="text-align: left;">
+                    <label class="col-sm-3 control-label" for="resolutionType">Resolution type:</label>
+                    <div class="col-sm-9" id="resolutionType" style="margin-top: 8px; width: 461px" edit-disabled="!user.isAdmin"
+                         editable-select="data.walkin.resolutionType" e-ng-options="o as o for o in resolutions_options.options">
+                        {{data.walkin.resolutionType || 'N/A'}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal" ng-show="data.walkin.resolutionType==='Other'">
+                <div class="form-group" style="text-align: left;">
+                    <label class="col-sm-3 control-label" for="otherResolution">Resolution subject:</label>
+                    <div id='otherResolution' class="col-sm-9" editable-text="data.walkin.otherResolution" edit-disabled="!user.isAdmin" style="margin-top: 8px;">
+                        {{data.walkin.otherResolution || 'N/A'}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="form-group" style="text-align: left;">
+                    <label class="col-sm-3 control-label" for="resolution">Resolution:</label>
+                    <div class="col-sm-9" id="resolution" style="margin-top: 8px;">
+                        <div editable-textarea="data.walkin.resolution" edit-disabled="!user.isAdmin" e-rows="2" e-cols="60">
+                          {{data.walkin.resolution || 'None'}}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+      <span class="pull-left" style="margin: 8px 0 0 6px;">
+        <button class="btn btn-xs btn-success" ng-show="user.isAdmin&&!data.walkin.snValue" ng-click="servicenowSync()">SN Sync</button>
+        <label class="label label-success" ng-show="data.walkin.snValue" style="font-size: 12px;"
+          tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="ServiceNow reference">SN: {{data.walkin.snValue}}</label>
+
+        <button class="btn btn-xs btn-warning" ng-show="user.isAdmin&&!data.walkin.forwardSnValue" ng-click="forward()">Forward</button>
+        <label class="label label-warning" ng-show="data.walkin.forwardSnValue" style="margin: 8px 0 0 0;font-size: 12px;"
+          tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Forwarded reference">Fd: {{data.walkin.forwardSnValue}}</label>
+      </span>
+
+      <span style="color: green;" ng-show="success"><i class="fa fa-check-circle"></i> {{success}}&emsp;</span>
+      <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
+      <button class="btn btn-primary" ng-click="update()"><i class="fa fa-save"></i>&nbsp;&nbsp;Save</button>
+      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</section>

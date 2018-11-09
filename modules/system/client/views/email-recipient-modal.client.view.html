@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()"><span class="fa fa-close" aria-hidden="true"></span></button>
+  <h4 class="modal-title">Send Email with Recipient</h4>
+</div>
+
+<div class="modal-body">
+  <span style="font-size: 14px; margin: 1em 1em 0 1em;">
+    <b><label>To:</label></b> {{data.name}} ({{data.email}})
+  </span>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0; margin-top: 1em; margin-bottom: 2em;">
+    <div class="form-inline">
+      <div class="form-group" style="width: 100%">
+        <label class="col-lg-1 col-md-1 col-sm-1 col-xs-1 control-label" style="margin-top: 6px;">Subject:</label>
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+          <input type="text" class="form-control" ng-model="input.subject" placeholder="Enter email subject here" style="width: 100%">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 1em 1em 0 1em;">
+    <p>Hi {{data.name}},</p>
+    <textarea rows="6" class="form-control" ng-model="input.body" style="margin-bottom: 1em;"></textarea>
+    <p>Thank you,<br>Student Technology Support Staff</p>
+  </div>
+</div>
+
+<div class="modal-footer" style="padding: 10px 10px 0 0; margin: 0 0 10px 0;">
+  <span ng-show="error" style="margin-right: 2em; color: red"><i class="fa fa-times-circle"></i> {{error}}</span>
+  <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="submit()">Send</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+</div>
+

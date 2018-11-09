@@ -1,0 +1,7 @@
+{
+  "from": "Student Tech Support <sts@emory.edu>",
+  "to": "sdl-help@emory.edu",
+  "subject": "Problem with Workstation <WSNUMBER>",
+  "bcc": "stsemory@gmail.com",
+  "text": "<b>Description of the problem:</b>\n\n<DESCRIPTION>\n\n<b>Attempted Fixes:</b>\n\n<FIXES>\n\n\nSubmitted by <NAME>, member of STS"
+}

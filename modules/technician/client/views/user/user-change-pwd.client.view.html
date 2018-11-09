@@ -1,0 +1,30 @@
+<section style="margin-top: 10vh;" ng-controller="UserSettingController">
+  <div class="col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-3 col-lg-4 col-md-4 col-sm-6 col-xs-6">
+    <div class="panel fresh-color panel-default">
+      <div class="panel-heading" style="font-size: 16px;">Change Current Password</div>
+      <form class="panel-body">
+        <div class="form-group">
+          <label for="current">Current Password:</label>
+          <input ng-model="password.currentPassword" type="password" class="form-control" id="current" placeholder="Current Password">
+        </div>
+        <div class="form-group">
+          <label for="new">New Password:</label>
+          <input ng-model="password.newPassword" type="password" class="form-control" id="new" placeholder="New Password">
+        </div>
+        <div class="form-group">
+          <label for="validate">Re-Enter Password:</label>
+          <input ng-model="password.verifyPassword" type="password" class="form-control" id="validate" placeholder="Re-Enter Password">
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <button type="submit" class="btn btn-default btn-block" ng-click="changePwd();">Change</button>
+        </div>
+      </form>
+    </div>
+    <div class="alert alert-danger col-sm-12" role="alert" ng-show="passwordMsg.error">
+      <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{passwordMsg.error}}
+    </div>
+    <div class="alert alert-success col-sm-12" role="alert" ng-show="passwordMsg.success">
+      <b><span class="fa fa-smile-o"></span> Great!</b> {{passwordMsg.success}}
+    </div>
+  </div>
+</section>

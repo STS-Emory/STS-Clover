@@ -1,0 +1,13 @@
+<section class="walkin-textarea-content" ng-controller="CustomerWalkinProblemController" ng-init="status.error=undefined">
+  <div class="walkin-field-content">
+    <p class="walkin-field-label-left">Problem that occurred:</p>
+    <textarea rows="4" class="form-control walkin-textarea-input" ng-model="walkin.description"></textarea>
+  </div>
+
+  <footer class="walkin-nav-buttons">
+    <button class="btn btn-md btn-default" ui-sref="customer.walkin.device-category">
+      <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back</button>
+    <button class="btn btn-md btn-primary" ng-click="toReview()">
+      Next&nbsp;&nbsp;<i class="fa fa-arrow-circle-right"></i></button>
+  </footer>
+</section>

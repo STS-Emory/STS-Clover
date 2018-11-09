@@ -1,0 +1,13 @@
+<section ng-controller="CustomerWalkinDeviceController" ng-init="status.error= undefined;">
+  <div class="walkin-list-content">
+    <p class="walkin-field-label-left">Specification:</p>
+    <button ng-repeat="spec in setting.device_specs" class="btn btn-block btn-primary"
+      ng-click="selectSpec(spec)">{{spec}}</button>
+
+    <footer class="walkin-nav-buttons">
+      <button class="btn btn-md btn-default" ui-sref="customer.walkin.device-category">
+        <i class="fa fa-arrow-circle-o-left"></i>&nbsp;&nbsp;Back
+      </button>
+    </footer>
+  </div>
+</section>

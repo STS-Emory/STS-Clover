@@ -1,0 +1,106 @@
+<section ng-controller="AdminUserController">
+  <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title" style="font-size: 16px;">Register New User</div>
+      </div>
+      <form class="card-body form-horizontal">
+        <div class="alert alert-danger col-sm-12" role="alert" ng-show="registerMsg.error">
+          <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{registerMsg.error}}
+        </div>
+        <div class="alert alert-success col-sm-12" role="alert" ng-show="registerMsg.success">
+          <b><span class="fa fa-smile-o"></span> Great!</b> {{registerMsg.success}}
+        </div>
+        <div class="form-group">
+          <label for="firstName" class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">First Name: </label>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <input ng-model="register.firstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastName" class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">Last Name: </label>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <input ng-model="register.lastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="username" class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">Username (NetID): </label>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <input ng-model="register.username" type="text" class="form-control" id="username" placeholder="Username (NetID)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">Register as: </label>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top: 4px;">
+            <span class="checkbox3 checkbox-inline checkbox-check checkbox-light">
+              <input type="checkbox" id="admin" ng-model="register.registerAs['admin']"><label for="admin">Admin</label>
+            </span>
+            <span class="checkbox3 checkbox-inline checkbox-check checkbox-light">
+              <input type="checkbox" id="technician" ng-model="register.registerAs['technician']" checked="true"><label for="technician">Technician</label>
+            </span>
+            <span class="checkbox3 checkbox-inline checkbox-check checkbox-light">
+              <input type="checkbox" id="customer" ng-model="register.registerAs['customer']"><label for="customer">Customer</label>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group" ng-show="register.registerAs['admin'] || register.registerAs['technician']">
+          <label for="password" class="control-label col-lg-3 col-md-3 col-sm-3 col-xs-3">Password: </label>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <input ng-model="register.password" type="password" class="form-control" id="password" placeholder="Password" ng-disabled="register.randomPwd">
+          </div>
+        </div>
+        <div class="form-group" ng-show="register.registerAs['admin'] || register.registerAs['technician']">
+          <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-xs-offset-3 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="checkbox3 checkbox-round checkbox-check checkbox-light checkbox-danger">
+              <input type="checkbox" id="checkbox-10" ng-model="register.randomPwd">
+              <label for="checkbox-10"> Generate random password</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-offset-4 col-md-offset-4 col-sm-offset-4 col-xs-offset-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <button type="submit" class="btn btn-default btn-block" style="margin-bottom: 1em;" ng-click="registerUser();">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="panel fresh-color panel-warning">
+      <div class="panel-heading" style="font-size: 16px;">Reset User Password</div>
+      <form class="panel-body">
+        <div class="alert alert-danger col-sm-12" role="alert" ng-show="resetMsg.error">
+          <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{resetMsg.error}}
+        </div>
+        <div class="alert alert-success col-sm-12" role="alert" ng-show="resetMsg.success">
+          <b><span class="fa fa-smile-o"></span> Great!</b> {{resetMsg.success}}
+        </div>
+        <div class="form-group">
+          <label for="resetUsername">Username (NetID):</label>
+            <input ng-model="reset.username" type="text" class="form-control" id="resetUsername" placeholder="Username (NetID) for reset">
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <button type="submit" class="btn btn-warning btn-block" ng-click="resetUser();">Reset</button>
+        </div>
+      </form>
+    </div>
+    <div class="panel fresh-color panel-danger">
+      <div class="panel-heading" style="font-size: 16px;">Remove Technician</div>
+      <form class="panel-body">
+        <div class="form-group">
+          <div class="alert alert-danger col-sm-12" role="alert" ng-show="removeMsg.error">
+            <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{removeMsg.error}}
+          </div>
+          <div class="alert alert-success col-sm-12" role="alert" ng-show="removeMsg.success">
+            <b><span class="fa fa-smile-o"></span> Great!</b> {{removeMsg.success}}
+          </div>
+          <label for="removeUsername">Username (NetID):</label>
+          <input ng-model="remove.username" type="text" class="form-control" id="removeUsername" placeholder="Username (NetID) for removal">
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <button type="submit" class="btn btn-danger btn-block" ng-click="removeTechnician();">Remove</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

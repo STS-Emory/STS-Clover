@@ -1,0 +1,158 @@
+<section ng-controller="WalkinTransferController" ng-init="init()">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="title">
+            <i class="fa fa-pencil"></i>&nbsp;&nbsp;Transfer Information
+          </div>
+        </div>
+        <span class="pull-right" style="font-size: 18px;">
+          <button class="btn btn-sm btn-primary" ng-click="viewWalkin()">
+            <i class="fa fa-eye"></i>&nbsp;&nbsp;View Walk-in
+          </button>
+        </span>
+      </div>
+      <div class="card-body" style="padding-top: 0;">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="sub-title" style="font-size: 20px;">
+            &nbsp;<i class="fa fa-male"></i>&nbsp;&nbsp;Customer Information
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+            <div class="form-group">
+              <label>NetID:</label>
+              <div>{{walkin.user.username || 'N/A'}}</div>
+            </div>
+            <div class="form-group">
+              <label>Location:</label>
+              <div>{{walkin.user.location || 'N/A'}}</div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+            <div class="form-group">
+              <label>Name:</label>
+              <div>{{walkin.user.displayName || 'N/A'}}</div>
+            </div>
+            <div class="form-group">
+              <label>Phone:</label>
+              <div>{{walkin.user.phone || 'N/A'}}</div>
+            </div>
+          </div>
+
+          <div class="sub-title" style="font-size: 20px;">
+            &nbsp;<i class="fa fa-book"></i>&nbsp;&nbsp;Walk-in Information
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 1em;">
+            <div class="form-group">
+              <label>Device:</label>
+              <div>{{walkin.deviceCategory || 'N/A'}}</div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 1em;">
+            <div class="form-group">
+              <label>Spec:</label>
+              <div>{{walkin.deviceInfo || 'N/A'}}</div>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0 0 0.5em 0; border-bottom: 0;"><u>Problem</u></div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: justify">
+              {{ walkin.description? '&emsp;'+walkin.description : 'N/A' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+          <div class="sub-title" style="font-size: 20px;">
+            &nbsp;<i class="fa fa-cog"></i>&nbsp;&nbsp;Check-in information
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0 0 0.5em 0; border-bottom: 0;">Preliminary Diagnostics</div>
+            <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3" ng-model="checkin.preDiagnostic" style="margin-bottom: 1em;"></textarea>
+
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0 0 0.5em 0; border-bottom: 0;">Suggested Actions</div>
+            <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3" ng-model="checkin.suggestedAction" style="margin-bottom: 1em;"></textarea>
+
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0 0 1em 0; border-bottom: 0;">Permission to reformat? &emsp;&emsp;
+              <div class="checkbox3 checkbox-success checkbox-inline checkbox-check checkbox-round checkbox-light" style="margin-top: 8px;">
+                <input type="checkbox" id="reformat" ng-model="checkin.reformatConsent"><label for="reformat">Allowed</label>
+              </div>
+            </div>
+
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0 0 0.5em 0; border-bottom: 0;">Additional Device Information</div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label">Brand:</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                      <input type="text" class="form-control" ng-model="checkin.deviceManufacturer" placeholder="Device brand here">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label">Username:</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                      <input type="text" class="form-control" ng-model="checkin.deviceInfoUser" placeholder="Device username here">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label">Model:</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                      <input type="text" class="form-control" ng-model="checkin.deviceModel" placeholder="Device model here">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label">Password:</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                      <input type="text" class="form-control" ng-model="checkin.deviceInfoPwd" placeholder="Device password here">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-lg-2 col-md-2 col-sm-2 control-label">OS Edition:</label>
+                  <div class="col-lg-10 col-md-10 col-sm-10" style="margin-top: 5px;">
+                      <span class="checkbox3 checkbox-inline checkbox-check checkbox-light" ng-repeat="edition in setting.computer_os_editions">
+                        <input type="checkbox" id="{{'os_'+edition}}" ng-model="checkin.deviceInfoOSAux[edition]">
+                        <label for="{{'os_'+edition}}">{{edition}}</label>
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-title" style="padding: 0 0 0 0; margin: 0.5em 0 0.5em 0; border-bottom: 0;">Item Received</div>
+            <div style="padding-left: 20px;">
+              <span class="checkbox3 checkbox-inline checkbox-check checkbox-light" ng-repeat="item in setting.checkin_items">
+                <input type="checkbox" id="{{'item_'+item}}" ng-model="checkin.itemReceivedAux[item]">
+                <label for="{{'item_'+item}}">{{item}}</label>
+              </span>
+            </div>
+          </div>
+
+          <span class="pull-right" style="margin-bottom: 1em;">
+            <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
+            <button ui-sref="tech.walkin.queue" class="btn btn-md">Cancel</button>&emsp;
+            <button class="btn btn-md btn-success" ng-click="transfer()"><i class="fa fa-check-square"></i> Transfer</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

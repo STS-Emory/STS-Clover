@@ -1,0 +1,41 @@
+<section class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-smg-offset-3 col-sm-6 col-xs-offset-3 col-xs-6"
+  style="position: absolute; top: 25vh;" ng-controller="AdminImportNetIdController">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="title">
+          User Entry (NetID) Importation&nbsp;
+          <span style="font-size: 12px; color: grey;">( NetID, FirstName, LastName, Type )</span>
+        </div>
+      </div>
+      <span class="pull-right">
+        <button type="file" class="btn btn-md btn-primary" ngf-select data-ng-model="file" accept=".txt, .csv"
+          ng-hide="!error && summary.count > 0 && summary.count != summary.importCount">
+          <span class=""> Upload file (.txt, .csv)</span>
+        </button>
+        <button type="button" class="btn btn-md btn-success" ng-click="import()"
+                ng-show="!error && summary.count > 0 && summary.count != summary.importCount">Import All</button>
+      </span>
+    </div>
+    <div class="card-body">
+      <uib-progressbar ng-show="importing && !summary.error"
+        max="summary.count" value="summary.importCount"><span style="color:white; white-space:nowrap;">
+        {{summary.importCount}} / {{summary.count}}</span></uib-progressbar>
+
+      <div class="text-center" ng-show="loading">
+        <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
+        <span style="font-size: 20px; font-weight: bold;">Loading...</span>
+      </div>
+
+      <div class="text-center" ng-show="error" style="color: red;">
+        <i class="fa fa-times-circle fa-2x"></i>
+        <span style="font-size: 20px; font-weight: bold;">{{error}}</span>
+      </div>
+
+      <div class="text-center" ng-show="success" style="color: green;">
+        <i class="fa fa-check-circle fa-2x"></i>
+        <span style="font-size: 20px; font-weight: bold;">{{success}}</span>
+      </div>
+    </div>
+  </div>
+</section>

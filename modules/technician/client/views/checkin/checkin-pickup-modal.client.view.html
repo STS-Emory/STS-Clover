@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="fa fa-close" aria-hidden="true"></span></button>
+  <h4 class="modal-title">RECEIPT FOR CUSTOMER PICKUP</h4>
+</div>
+
+<div class="modal-body">
+  <p align="justify">By typing in my signature below, I have acknowledged that I have received my computer and all other items in good order.</p>
+
+  <p align="justify" style="color: red;">Clicking the "Sign" button, you acknowledge the receipt of these items.</p>
+
+  <div class="form-horizontal">
+    <div class="form-group">
+      <div class="col-lg-10 col-md-10 col-sm-10" style="padding: 0 0 0 2em; ">
+        <input type="text" class="form-control" placeholder="{{data.displayName}}" ng-model="input">
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2" style="padding: 0 2em 0 0; margin-top: -5px;">
+        <button type="button" class="btn btn-block btn-primary" data-dismiss="modal" ng-click="submit()">Sign</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer" style="color: blue">
+  <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+

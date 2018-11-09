@@ -1,0 +1,7 @@
+{
+  "from": "Student Tech Support <sts@emory.edu>",
+  "to": "",
+  "subject": "Thank you for your visit!",
+  "text": "Dear <NAME>,\n\nThank you for your recent visit to Student Technology Support. We value your feedback and ask you to fill out our simple 3 question survey. This survey helps us provide great service to you, our fellow students.\nWe are always looking to improve our services and value your opinion. Please click the link below to take the survey or copy and paste the address.\nhttp://it.emory.edu/studentdigitallife/support/student-technology-support/survey-CI.html\n\nSincerely,\nStudent Technology Support Staff",
+  "html": "Dear <NAME>,<br><p>Thank you for your recent visit to Student Technology Support. We value your feedback and ask you to fill out our simple 3 question survey. This survey helps us provide great service to you, our fellow students.</p><p>We are always looking to improve our services and value your opinion. Please click the link below to take the survey or copy and paste the address.</p><p><a href='http://it.emory.edu/studentdigitallife/support/student-technology-support/survey-CI.html' target='_blank'>http://it.emory.edu/studentdigitallife/support/student-technology-support/survey-CI.html</a></p>Sincerely,<br>Student Technology Support Staff"
+}

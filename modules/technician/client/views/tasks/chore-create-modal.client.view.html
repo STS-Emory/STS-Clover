@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+    <span class="fa fa-close" aria-hidden="true" style="margin: 8px 8px 0 0"></span>
+  </button>
+  <h3 class="modal-title"><i class="fa fa-tasks"></i>&nbsp;&nbsp;Create Chore</span></h3>
+</div>
+
+<div class="modal-body" style="padding-bottom: 0; height: 140px;">
+  <div class="sub-title" style="font-size: 16px;">Instruction:</div><hr style="margin: 3px 0 8px 0"/>
+  <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="chore.instruction"></textarea>
+</div>
+
+<div class="modal-footer" style="padding: 10px 10px 0 0; margin: 0 0 10px 0;">
+  <span ng-show="error" style="margin-right: 2em; color: red"><i class="fa fa-times-circle"></i> {{error}}</span>
+  <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="create()"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Create </button>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+</div>
+

@@ -1,0 +1,39 @@
+{
+  "name": "STS-Integrated-System",
+  "version": "2.0.0",
+  "description": "An integrated system for STS walk-in, check-in, and administrative affairs.",
+  "homepage": "http://https://github.com/henryYHC/STS-Integrated-System",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "latest",
+    "angular-resource": "latest",
+    "angular-mocks": "latest",
+    "angular-cookies": "latest",
+    "angular-animate": "latest",
+    "angular-touch": "latest",
+    "angular-sanitize": "latest",
+    "angular-bootstrap": "latest",
+    "angular-ui-router": "^0.3.1",
+    "angular-messages": "latest",
+    "angular-ui-utils": "bower",
+    "angular-bootstrap-switch": "*",
+    "bootstrap": "latest",
+    "bootstrap-switch": "latest",
+    "jquery": "latest",
+    "font-awesome": "latest",
+    "datatables": "latest",
+    "matchHeight": "latest",
+    "select2": "latest",
+    "animate.css": "latest",
+    "ace-builds": "latest",
+    "checkbox3": "latest",
+    "owasp-password-strength-test": "~1.3.0",
+    "Chart.js": "^2.1.4",
+    "randomcolor": "^0.4.4",
+    "angular-xeditable": "^0.1.12",
+    "ng-file-upload": "^12.0.4"
+  },
+  "resolutions": {
+    "angular": "~1.5"
+  }
+}

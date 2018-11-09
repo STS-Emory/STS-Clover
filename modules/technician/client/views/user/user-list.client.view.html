@@ -1,0 +1,70 @@
+<section ng-controller="UserListController">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: left;">
+    <form class="form-inline col-lg-9 col-md-9 col-sm-9 col-xs-8">
+      <div class="form-group">
+        <label for="select" style="font-size: 15px;">Search for Users:&emsp;</label>
+        <select id="select" style="width: 120px;" ng-model="query.field">
+          <option value="netid">NetID</option>
+          <option value="name">Name</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Input search query"  style="height: 28px; width: 480px;" ng-model="query.value">
+      </div>
+      <button class="btn btn-sm btn-default" ng-click="search()" type="submit"><span class="fa fa-search"></span> Search</button>
+    </form>
+
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-4">
+      <button class="btn btn-sm btn-primary" ng-click="technician()">Technicians</button>
+      <button class="btn btn-sm btn-info" ng-click="invalid()">Invalid User</button>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="position: absolute; top: 45%;" ng-show="!users || users.length == 0">
+    <div style="text-align: center;"><hr/>
+      <b style="font-size: 18px;"><span class="fa fa-info-circle"></span>
+        {{ searchMessage || 'Please input query to search for users.' }}</b>
+      <hr/></div>
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 card" ng-show="users && users.length > 0"
+       style="margin-top: 15px; overflow: auto; max-height: 75vh;">
+    <table class="table table-hover" style="margin-top: 10px;">
+      <thead><tr>
+        <th>Action</th>
+        <th>NetID</th>
+        <th>Customer</th>
+        <th>Location</th>
+        <th>Phone</th>
+        <th>Roles</th>
+        <th>Verified</th>
+        <th>isActive</th>
+      </tr></thead>
+      <tbody><tr ng-repeat="user in users">
+        <td style="width:65px; text-align: center;">
+          <span class="fa fa-angle-double-right" ng-show="!showActions[$index]" ng-mouseover="showActions[$index]=true"></span>
+          <span ng-show="showActions[$index]" ng-mouseleave="showActions[$index]=false">
+            <span class="fa fa-plus-circle" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Create task" ng-click="createTask(user)"></span>
+            <span ng-show="!user.verified" class="fa fa-thumbs-o-up" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Verify" ng-click="verify(user)"></span>
+            <span ng-show="!user.isActive" class="fa fa-user-plus" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Active" ng-click="setActive(user)"></span>
+            <span ng-show="user.isActive" class="fa fa-user-times" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Inactive" ng-click="setInactive(user)"></span>
+            <span ng-show="isAdmin&&user.roles.indexOf('technician')>=0" class="fa fa-eye-slash" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Remove Technician" ng-click="removeTechnician(user)"></span>
+          </span>
+        </td>
+        <td>{{user.username}}</td>
+        <td>{{user.displayName}}</td>
+        <td>{{user.location}}</td>
+        <td>{{user.phone.substring(0, 3) + '-' + user.phone.substring(3, 6) + '-' + user.phone.substring(6)}}</td>
+        <td>{{user.roles.length > 0? user.roles.join(', ') : 'None'}}</td>
+        <td>{{user.verified? 'Yes' : 'No'}}</td>
+        <td>{{user.isActive? 'Yes' : 'No'}}</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+</section>
+
+<!-- Toggle Select2 select box -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('select').select2({ minimumResultsForSearch: Infinity } );
+  });
+</script>

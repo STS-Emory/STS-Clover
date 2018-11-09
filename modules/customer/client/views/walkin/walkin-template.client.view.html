@@ -1,0 +1,21 @@
+<section class="home-container" ng-controller="CustomerWalkinController" ng-init="init()">
+  <header class="walkin-header">
+    <img class="walkin-image" src="static/img/walkin-header.png" ui-sref="customer.home">
+  </header>
+
+  <ui-view></ui-view>
+
+  <div class="walkin-error" ng-show="status.error" style="white-space: pre-line"><i class="fa fa-times-circle"></i> {{status.error}}</div>
+  <footer class="walkin-footer">
+    <div class="row">
+      <img class="walkin-breadcrumb" src="static/img/breadcrumb/customer_copy.png"
+           ng-class="status.state==='netid' || status.state==='customer'? 'walkin-breadcrumb-active' : ''">
+      <img class="walkin-breadcrumb" src="static/img/breadcrumb/device_copy.png"
+           ng-class="status.state==='device'? 'walkin-breadcrumb-active' : ''">
+      <img class="walkin-breadcrumb" src="static/img/breadcrumb/problem_copy.png"
+           ng-class="status.state==='problem'? 'walkin-breadcrumb-active' : ''">
+      <img class="walkin-breadcrumb" src="static/img/breadcrumb/review_copy.png"
+           ng-class="status.state==='review'? 'walkin-breadcrumb-active' : ''">
+    </div>
+  </footer>
+</section>

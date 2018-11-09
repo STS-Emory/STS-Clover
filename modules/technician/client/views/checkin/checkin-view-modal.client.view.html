@@ -1,0 +1,152 @@
+<section>
+    <div class="modal-header">
+        <h2 class="modal-title">
+          &nbsp;<i class="fa fa-info"></i>&emsp;Check-in Information
+          <span class="pull-right" style="font-size: 14px; font-weight: 500;">
+              <font style="font-weight: 300;">Created at </font>{{(data.checkin.created | date:'short') || 'N/A'}} <br>
+              <font style="font-weight: 300;">Updated at </font>{{(data.checkin.updated | date:'short') || 'N/A'}}
+          </span>
+        </h2>
+    </div>
+
+    <div class="modal-body" style="overflow: auto;">
+      <div class="col-md-12">
+        <div class="col-md-4" style="font-size: 11.5px;">
+          <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+            <h4>Customer information </h4>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-3 control-label" for="netid">NetID:</label>
+              <div class="col-sm-9" id="netid" style="margin-top: 8px;">{{data.checkin.user.username}}</div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-3 control-label" for="name">Name:</label>
+              <div class="col-sm-9" id="name" style="margin-top: 8px;">{{data.checkin.user.displayName}}</div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-3 control-label" for="phone">Phone:</label>
+              <div class="col-sm-9" id="phone" style="margin-top: 8px;">{{data.checkin.user.phone}}</div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-3 control-label" for="location">Housing:</label>
+              <div class="col-sm-9" id="location" style="margin-top: 8px;">{{data.checkin.user.location}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8" style="font-size: 11.5px;">
+          <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+            <h4>Device information </h4>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-2 control-label" for="deviceT">Device:</label>
+              <div class="col-sm-10" id="deviceT" style="margin-top: 8px;">{{data.checkin.deviceManufacturer}} {{data.checkin.deviceModel}}</div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-2 control-label" for="deviceI">OS info:</label>
+              <div class="col-sm-10" id="deviceI" style="margin-top: 8px;">{{data.checkin.walkin.deviceInfo}}
+                ({{data.checkin.deviceInfoOS.join(', ')}})
+              </div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-2 control-label" for="reformat">Reformat:</label>
+              <div class="col-sm-10" id="reformat" style="margin-top: 8px;">{{data.checkin.reformatConsent? 'YES' : 'NO'}}</div>
+            </div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left">
+              <label class="col-sm-2 control-label" for="items">Items:</label>
+              <div class="col-sm-10" id="items" style="margin-top: 8px;">{{data.checkin.itemReceived.join(', ')}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12" style="font-size: 11.5px; margin-top: 2em;">
+        <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+          <h4>Initial Task detail</h4>
+        </div>
+        <div class="form-horizontal">
+          <div class="form-group" style="text-align: left;">
+            <label class="col-sm-2 control-label" for="diag">Diagnostics:</label>
+            <div class="col-sm-10" id="diag" style="margin-top: 8px;"><p>{{data.checkin.preDiagnostic}}</p></div>
+          </div>
+          <div class="form-horizontal">
+            <div class="form-group" style="text-align: left;">
+              <label class="col-sm-2 control-label" for="action">Suggested action:</label>
+              <div class="col-sm-10" id="action" style="margin-top: 8px;"><p>{{data.checkin.suggestedAction}}</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12" style="font-size: 11.5px;">
+        <div class="sub-title" style="border-bottom: 1px solid #EAEAEA; margin-bottom: 1em;">
+          <h4>Completion detail</h4>
+        </div>
+      </div>
+      <div class="col-md-8" style="margin-bottom: 1em; overflow: auto; max-height: 40vh; padding-right: 0.5em;">
+        <div class="sub-title" style="margin-bottom: 0; border-bottom: 0; font-size: 14px;">
+          &nbsp;<i class="fa fa-book"></i>&nbsp;&nbsp;Service records
+        </div>
+        <span style="margin-left: 2em;" ng-hide="data.checkin.serviceLog && data.checkin.serviceLog.length > 0">None</span>
+        <table class="table table-hover" style="margin-bottom: 0px;"
+               ng-show="data.checkin.serviceLog && data.checkin.serviceLog.length > 0">
+          <tbody>
+          <tr ng-repeat="log in data.checkin.serviceLog">
+            <th style="width: 20px;">
+              <i class="fa fa-exclamation-circle" ng-show="log.type==='Important'"
+                 tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Important"></i>
+              <i class="fa fa-comment" ng-show="log.type==='Note'"
+                 tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Note"></i>
+            </th>
+            <td ng-show="log.type==='Important'" style="color:red;"><i>{{log.description}}</i></td>
+            <td ng-show="log.type==='Note'"><i  style="color:grey;">{{log.description}}</i></td>
+            <td ng-show="log.type!=='Important'&&log.type!=='Note'">{{log.description}}</td>
+            <td style="width: 120px;"><i class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true"
+                uib-tooltip="{{log.createdBy.displayName}}"></i> {{log.createdAt | date : 'M/d h:mma'}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-4" style="padding: 0; margin-top: 2em;">
+        <div class="form-group">
+          <label>Checked in:</label>
+          <div><i>{{data.checkin.walkin.resoluteTechnician.displayName || 'No one'}}</i> at {{(data.checkin.walkin.resolutionTime | date: 'short') || 'N/A'}}</div>
+        </div>
+        <div class="form-group">
+          <label>Completion:</label>
+          <div><i>{{data.checkin.completionTechnician.displayName || 'No one'}}</i> at {{(data.checkin.completionTime | date: 'short') || 'N/A'}}</div>
+        </div>
+        <div class="form-group">
+          <label>Verification:</label>
+          <div><i>{{data.checkin.verificationTechnician.displayName || 'No one'}}</i> at {{(data.checkin.verificationTime | date: 'short') || 'N/A'}}</div>
+        </div>
+        <div class="form-group">
+          <label>Completion:</label>
+          <div><i>{{data.checkin.checkoutTechnician.displayName || 'No one'}}</i> at {{(data.checkin.checkoutTime | date: 'short') || 'N/A'}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span class="pull-left" style="margin: 8px 0 0 6px;">
+        <button class="btn btn-xs btn-success" ng-show="!data.checkin.snValue" ng-click="servicenowSync()" ng-show="user.isAdmin">SN Sync</button>
+        <label class="label label-success" ng-show="data.checkin.snValue" style="font-size: 12px;"
+               tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="ServiceNow reference">SN: {{data.checkin.snValue}}</label>
+      </span>
+
+      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</section>

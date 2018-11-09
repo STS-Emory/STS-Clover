@@ -1,0 +1,30 @@
+<section class="login-page" ng-controller="LoginController">
+    <div class="container">
+        <div class="login-box">
+            <div>
+                <div class="login-form row">
+                    <div class="col-sm-12 text-center login-header" style="color: black;">
+                        <img class="login-logo fa fa-5x" src="img/logo.png" style="width: 100%;"></img>
+                        <h4 class="login-title">Technician Portal</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <form class="login-body">
+                          <div class="control">
+                            <input type="text" class="form-control" placeholder="Username" ng-model="credentials.username"/>
+                          </div>
+                          <div class="control">
+                            <input type="password" class="form-control" placeholder="Password" ng-model="credentials.password" />
+                          </div>
+                          <div class="login-button text-center">
+                            <input type="submit" class="btn btn-primary" value="Login" ng-click="signin()" />
+                          </div>
+                        </form>
+                    </div>
+                </div>
+              <div class="alert alert-danger col-sm-12" role="alert" ng-show="error">
+                <b><span class="fa fa-frown-o"></span> Bad news!</b> {{error}}
+              </div>
+            </div>
+        </div>
+    </div>
+</section>
