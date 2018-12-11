@@ -1,5 +1,5 @@
 {
-  "from": "Student Tech Support <sts@emory.edu>",
+  "from": "Student Tech Support <nobody@emory.edu>",
   "to": "sdl-help@emory.edu",
   "subject": "Problem with <DEVICETYPE>: <DEVICENUMBER>",
   "bcc": "stsemory@gmail.com",

@@ -1,5 +1,5 @@
 {
-  "from": "Student Tech Support <sts@emory.edu>",
+  "from": "Student Tech Support <nobody@emory.edu>",
   "to": "",
   "subject": "Student Technology Support Check-in Repair Log",
   "text": "Reference Number: <ID>\nItems Received: <ITEMS>\n\nHello <NAME>,\n\nThank you for visiting us at Student Technology Support. To better let you know what work has been done on your service request. Here is the service log for each individual task we have done on your device(s). Please let use know if you have any questions.\n\nService log:\n<LOG>\nThank you,\nStudent Technology Support Staff",
