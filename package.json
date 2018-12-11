@@ -44,7 +44,7 @@
     "http-request": "^0.7.0",
     "jasmine-core": "~2.4.1",
     "jsonfile": "^2.3.0",
-    "lodash": "~4.3.0",
+    "lodash": ">=4.17.5",
     "method-override": "~2.3.5",
     "mocha": "~2.4.5",
     "mongoose": "^4.8.1",
