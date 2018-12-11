@@ -7,7 +7,7 @@ angular.module('technician').controller('ProblemReportController', ['$scope', '$
       modal.result.then(function(result) {
         result.type = type;
 
-        $http.post('/api/technician/email/report/problem/workstations', result)
+        $http.post('/api/technician/email/report/problem', result)
           .success(function(){ $scope.success = true; })
           .error(function(){
             $scope.error = true;

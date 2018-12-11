@@ -16,6 +16,14 @@ angular.module('system').service('ProblemLauncher', ['$uibModal',
           config.controller = 'ProblemReportWorkstationController';
           config.templateUrl = 'modules/technician/client/views/problems/problem-workstation-modal.client.view.html';
           break;
+        case 'Studio':
+          config.controller = 'ProblemReportWorkstationController';
+          config.templateUrl = 'modules/technician/client/views/problems/problem-studio-modal.client.view.html';
+          break;
+        case 'Printer':
+          config.controller = 'ProblemReportWorkstationController';
+          config.templateUrl = 'modules/technician/client/views/problems/problem-printer-modal.client.view.html';
+          break;
       }
       return $uibModal.open(config);
     };

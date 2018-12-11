@@ -9,11 +9,13 @@ angular.module('technician').controller('ProblemReportWorkstationController', ['
       $uibModalInstance.close(false);
     };
 
-    $scope.report = function() {
+    $scope.report = function(type) {
       var input = $scope.input;
 
-      if (!input.WSnumber || input.WSnumber.length != 10)
+      if (type == 'Workstation' && (!input.detail || input.detail.length != 10))
         $scope.error = 'Please enter the workstation number (3 digits).';
+      else if (type != 'Workstation' && !input.detail)
+        $scope.error = 'Please select the type of printer or studio';
       else if (!input.description)
         $scope.error = 'Please enter the description of the problem.';
       else if (!input.fixes)
@@ -23,12 +25,12 @@ angular.module('technician').controller('ProblemReportWorkstationController', ['
     };
 
     $scope.formatWSNumber = function() {
-      var number = $scope.input.WSnumber, digits = number.match(/\d+/)[0];
+      var number = $scope.input.detail, digits = number.match(/\d+/)[0];
       if (digits.length > 3) digits = digits.substring(0, 3);
 
       if (number && digits)
-        $scope.input.WSnumber = 'SL-WML-' + digits;
-      else $scope.input.WSnumber = '';
+        $scope.input.detail = 'SL-WML-' + digits;
+      else $scope.input.detail = '';
     };
   }
 ]);

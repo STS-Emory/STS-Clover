@@ -26,7 +26,7 @@ exports.TEMPLATE = {
   CI_LOG: template_directory + '/ServiceLog.json',
   CI_SURVEY: template_directory + '/Survey_Checkin.json',
 
-  PR_WORKSTATIONS: template_directory + '/Problem-Workstations.json'
+  PR_WORKSTATIONS: template_directory + '/Problem.json'
 };
 exports.ATTACHMENT = {
   CI_LIABILITY: {
@@ -190,7 +190,7 @@ exports.sendREST = function(req, res) {
   });
 };
 
-exports.reportProblem_Workstations = function(req, res) {
+exports.reportProblem = function(req, res) {
   var config = req.body, user = req.user;
 
   jsonfile.readFile(exports.TEMPLATE.PR_WORKSTATIONS, function(err, template) {
@@ -199,7 +199,7 @@ exports.reportProblem_Workstations = function(req, res) {
       return res.sendStatus(500);
     }
     else {
-      template.subject = template.subject.replace('<WSNUMBER>', config.WSnumber);
+      template.subject = template.subject.replace('<DEVICENUMBER>', config.detail).replace('<DEVICETYPE>', config.type);
       template.text = template.text.replace('<DESCRIPTION>', config.description);
       template.text = template.text.replace('<FIXES>', config.fixes);
       template.text = template.text.replace('<NAME>', user.displayName);
