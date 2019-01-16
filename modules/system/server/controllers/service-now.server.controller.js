@@ -60,8 +60,8 @@ var getWalkinTemplateObj = function(walkin){
       subject += 'Unresolved - Customer will return: ';
 
     switch(walkin.resolutionType){
-      case 'DooleyNet':
-        subject += 'DN ';
+      case 'EmoryGuest':
+        subject += 'EG ';
         if(walkin.deviceCategory === 'Other')
           subject += walkin.otherDevice;
         else if(dinfo) subject += dinfo;
