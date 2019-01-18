@@ -11,8 +11,8 @@ angular.module('technician').controller('TechHeaderController', ['$scope', '$sta
       $scope.breadcrumb = toState.data.breadcrumb;
     });
 
-    $scope.launchCalender = function() {
-      ModalLauncher.launchCalendarModal();
+    $scope.launchCalender = function(studio) {
+      ModalLauncher.launchCalendarModal(studio);
     };
 
     $scope.sendEmail = function() {

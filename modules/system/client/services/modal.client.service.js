@@ -83,12 +83,13 @@ angular.module('system').service('ModalLauncher', ['$uibModal',
       });
     };
 
-    this.launchCalendarModal = function() {
+    this.launchCalendarModal = function(studio) {
+      var template = 'modules/technician/client/views/calendar/{}-calendar-modal.client.view.html'.replace('{}', studio);
       return $uibModal.open({
         animation: true, size: 'md', backdrop: 'static',
         controller: 'ChoreCreateController',
         windowClass: 'fade modal-primary panel-center-modal',
-        templateUrl: 'modules/technician/client/views/calendar/sps-calendar-modal.client.view.html',
+        templateUrl: template,
         resolve: { data: function(){ return { }; } }
       });
     };
