@@ -1,8 +1,13 @@
 'use strict';
 
 var _ = require('lodash'),
+  path = require('path'),
   mongoose = require('mongoose'),
-  UserEntry = mongoose.model('UserEntry');
+  UserEntry = mongoose.model('UserEntry'),
+  userHandler = require(path.resolve('./modules/users/server/controllers/admin.server.controller')),
+  User = mongoose.model('User');
+
+
 
 mongoose.Promise = global.Promise;
 
@@ -19,6 +24,48 @@ exports.create = function(req, res) {
       if(err) { console.error(err); res.sendStatus(500); }
       else res.jsonp(entry);
     });
+  });
+
+  var new_user = {
+    username : new_entry.username.toLowerCase(),
+    roles : ['customer'],
+    firstName : new_entry.firstName,
+    lastName : new_entry.lastName
+  };
+
+  // Register User as customer
+  // Checking if the user exists
+  User.findOne({ username : new_user.username }, function(err, existedUser){
+    if(err){
+      console.error(err);
+      res.sendStatus(500);
+    }
+    else if(existedUser){
+      new_user.roles = new_user.roles.concat(existedUser.roles);
+      existedUser = _.extend(existedUser, new_user);
+      existedUser.verified = true;
+
+      existedUser.save(function(err){
+        if (err){
+          console.error(err);
+          res.sendStatus(500);
+        }
+      });
+    }
+    else{
+      // Init user and add missing fields
+      var user = new User(new_user);
+      user.verified = true;
+      user.location = 'N/A'; user.phone = '0000000000';
+      user.displayName = user.firstName + ' ' + user.lastName;
+
+      user.save(function(err){
+        if (err){
+          console.error(err);
+          res.sendStatus(500);
+        }
+      });
+    }
   });
 };
 
