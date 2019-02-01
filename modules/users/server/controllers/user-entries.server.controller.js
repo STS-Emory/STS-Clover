@@ -58,6 +58,9 @@ exports.create = function(req, res) {
       user.verified = true;
       user.location = 'N/A'; user.phone = '0000000000';
       user.displayName = user.firstName + ' ' + user.lastName;
+      
+      user.salt = undefined;
+      user.password = User.generateRandomPassphrase();
 
       user.save(function(err){
         if (err){
