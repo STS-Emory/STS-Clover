@@ -6,7 +6,7 @@ angular.module('technician.admin').controller('AdminUserController', ['$scope', 
     $scope.register = { registerAs : { customer : true } };
 
     $scope.clearMsgs = function() {
-      $scope.registerMsg = {}; $scope.resetMsg = {}; $scope.removeMsg = {};
+      $scope.registerMsg = {}; $scope.resetMsg = {}; $scope.removeTechMsg = {}; $scope.removeAdminMsg = {};
     };
     $scope.clearMsgs();
 
@@ -49,14 +49,29 @@ angular.module('technician.admin').controller('AdminUserController', ['$scope', 
       if($scope.remove && $scope.remove.username){
         $http.put('/api/auth/removeTechnician/'+$scope.remove.username)
           .success(function(response){
-            $scope.removeMsg.success = 'Remove successfully!';
+            $scope.removeTechMsg.success = 'Remove successfully!';
           })
           .error(function(response){
-            $scope.removeMsg.error = response.message;
+            $scope.removeTechMsg.error = response.message;
           }
         );
       }
-      else $scope.removeMsg.error = 'Missing username.';
+      else $scope.removeTechMsg.error = 'Missing username.';
+    };
+
+    $scope.removeAdmin = function() {
+      $scope.clearMsgs();
+      if($scope.remove && $scope.remove.usernameAdmin){
+        $http.put('/api/auth/removeAdmin/'+$scope.remove.usernameAdmin)
+          .success(function(response){
+            $scope.removeAdminMsg.success = 'Remove successfully!';
+          })
+          .error(function(response){
+            $scope.removeAdminMsg.error = response.message;
+          }
+        );
+      }
+      else $scope.removeAdminMsg.error = 'Missing username.';
     };
   }
 ]);

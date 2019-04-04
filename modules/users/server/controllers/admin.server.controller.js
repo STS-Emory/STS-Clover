@@ -97,3 +97,21 @@ exports.removeTechnicianRole = function (req, res){
   else
     return res.status(400).send({ message: 'User does not exist.' });
 };
+
+exports.removeAdminRole = function (req, res){
+  if(req.profile){
+    var user = req.profile;
+    var idx = user.roles.indexOf('admin');
+
+    if(idx < 0)
+      return res.status(400).send({ message: 'User does not have panel role.' });
+
+    user.roles.splice(idx, 1);
+    user.save(function(err){
+      if(err) return res.status(400).send({ message : errorHandler.getErrorMessage(err) });
+      else res.json(user);
+    });
+  }
+  else
+    return res.status(400).send({ message: 'User does not exist.' });
+};

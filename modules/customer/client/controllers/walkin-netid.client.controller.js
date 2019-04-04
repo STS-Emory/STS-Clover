@@ -67,6 +67,9 @@ angular.module('customer').controller('CustomerWalkinNetIDController', ['$scope'
                 }
                 $scope.walkin.user = formatedUser;
 
+                // User need to input if the phone number is default
+                $scope.walkin.user.phone = $scope.walkin.user.phone == '0000000000' ? '' : $scope.walkin.user.phone;
+
                 if (user.level === 'Wildcard' || !formatedUser.verified)
                   $state.go('customer.walkin.confirm-netid');
 

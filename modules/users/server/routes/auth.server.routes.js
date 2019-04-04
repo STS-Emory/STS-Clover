@@ -13,6 +13,8 @@ module.exports = function (app) {
   app.route('/api/auth/registerUser').post(users.hasAdminPermission, admin.registerUser);
   app.route('/api/auth/resetPwd/:username').put(users.hasAdminPermission, admin.resetPwd);
   app.route('/api/auth/removeTechnician/:username').put(users.hasAdminPermission, admin.removeTechnicianRole);
+
+  app.route('/api/auth/removeAdmin/:username').put(users.hasAdminPermission, admin.removeAdminRole);
   
   app.param('username', users.userByUsername);
 };

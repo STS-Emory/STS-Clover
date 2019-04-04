@@ -66,7 +66,7 @@
   </div>
 
   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-    <div class="panel fresh-color panel-warning">
+    <div class="panel fresh-color panel-info">
       <div class="panel-heading" style="font-size: 16px;">Reset User Password</div>
       <form class="panel-body">
         <div class="alert alert-danger col-sm-12" role="alert" ng-show="resetMsg.error">
@@ -80,25 +80,43 @@
             <input ng-model="reset.username" type="text" class="form-control" id="resetUsername" placeholder="Username (NetID) for reset">
         </div>
         <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
-          <button type="submit" class="btn btn-warning btn-block" ng-click="resetUser();">Reset</button>
+          <button type="submit" class="btn btn-info btn-block" ng-click="resetUser();">Reset</button>
         </div>
       </form>
     </div>
-    <div class="panel fresh-color panel-danger">
+    <div class="panel fresh-color panel-warning">
       <div class="panel-heading" style="font-size: 16px;">Remove Technician</div>
       <form class="panel-body">
         <div class="form-group">
-          <div class="alert alert-danger col-sm-12" role="alert" ng-show="removeMsg.error">
-            <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{removeMsg.error}}
+          <div class="alert alert-danger col-sm-12" role="alert" ng-show="removeTechMsg.error">
+            <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{removeTechMsg.error}}
           </div>
-          <div class="alert alert-success col-sm-12" role="alert" ng-show="removeMsg.success">
-            <b><span class="fa fa-smile-o"></span> Great!</b> {{removeMsg.success}}
+          <div class="alert alert-success col-sm-12" role="alert" ng-show="removeTechMsg.success">
+            <b><span class="fa fa-smile-o"></span> Great!</b> {{removeTechMsg.success}}
           </div>
           <label for="removeUsername">Username (NetID):</label>
           <input ng-model="remove.username" type="text" class="form-control" id="removeUsername" placeholder="Username (NetID) for removal">
         </div>
         <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
-          <button type="submit" class="btn btn-danger btn-block" ng-click="removeTechnician();">Remove</button>
+          <button type="submit" class="btn btn-warning btn-block" ng-click="removeTechnician();">Remove</button>
+        </div>
+      </form>
+    </div>
+    <div class="panel fresh-color panel-danger">
+      <div class="panel-heading" style="font-size: 16px;">Remove Admin</div>
+      <form class="panel-body">
+        <div class="form-group">
+          <div class="alert alert-danger col-sm-12" role="alert" ng-show="removeAdminMsg.error">
+            <b><span class="fa fa-frown-o"></span> Uh oh!</b> {{removeAdminMsg.error}}
+          </div>
+          <div class="alert alert-success col-sm-12" role="alert" ng-show="removeAdminMsg.success">
+            <b><span class="fa fa-smile-o"></span> Great!</b> {{removeAdminMsg.success}}
+          </div>
+          <label for="removeUsernameAdmin">Username (NetID):</label>
+          <input ng-model="remove.usernameAdmin" type="text" class="form-control" id="removeUsernameAdmin" placeholder="Username (NetID) for removal">
+        </div>
+        <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <button type="submit" class="btn btn-danger btn-block" ng-click="removeAdmin();">Remove</button>
         </div>
       </form>
     </div>
