@@ -251,8 +251,11 @@
                       <i class="fa fa-comment" ng-show="log.type==='Note'"
                          tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Note"></i>
                     </th>
-                    <td editable-text="log.description" ng-style="getLogStyle(log.type)" onaftersave="updateLog(log)"
-                        edit-disabled="disableEditing(log.createdBy.username, log.createdAt)">{{log.description}}</td>
+                    <td>
+                      <div editable-text="log.description" onaftersave="updateLog(log)"
+                        edit-disabled="disableEditing(log.createdBy.username, log.createdAt)">{{log.description}}
+                      </div>
+                    </td>
                     <td style="width: 120px;"><i class="fa fa-user" tooltip-placement="top" tooltip-append-to-body="true"
                       uib-tooltip="{{log.createdBy.displayName}}"></i> {{log.createdAt | date : 'M/d h:mma'}}</td>
                     <td style="width: 20px;"><i class="fa fa-times" ng-show="showRemoval(log.createdBy.username, log.createdAt)"
