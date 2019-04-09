@@ -28,8 +28,6 @@ angular.module('customer').controller('CustomerWalkinCustomerController', ['$sco
             phone += phone_chars[i];
         }
 
-        console.log(phone);
-
         if (phone.length == 10) {
           $scope.walkin.user.phone = phone;
           $state.go('customer.walkin.location');
