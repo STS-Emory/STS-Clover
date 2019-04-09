@@ -101,6 +101,17 @@
             </div>
           </div>
         </form>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="admin-email" class="col-sm-5 control-label" style="margin-top: 11px;">Admin Email</label>
+            <div class="col-sm-offset-1 col-sm-6" style="margin-top: 15px;">
+              <b>{{setting.admin_email}}</b>
+            </div>
+            <div class="col-sm-offset-1 col-sm-6" style="padding-top:10px;">
+              <button class="btn btn-xs btn-warning pull-left" ng-click="changeAdminEmail(setting)">Change</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
     <div class="panel fresh-color panel-info" style="margin-bottom: 15px;">

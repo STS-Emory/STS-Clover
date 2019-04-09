@@ -53,6 +53,19 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
       });
     };
 
+    $scope.changeAdminEmail = function(setting){
+      var email = ModalLauncher.launchDefaultInputModal(
+        'Change Admin Email',
+        'Please enter the new email for Admin. The address is used for recieving notifications from the system.',
+        setting.admin_email
+        );
+      email.result.then(function(response){
+        if (response){
+          setting.admin_email = response;
+        }
+      });
+    };
+
     $scope.newCheckinItem = function(items){
       var item = ModalLauncher.launchDefaultInputModal(
         'New Allowed Check-in Item',

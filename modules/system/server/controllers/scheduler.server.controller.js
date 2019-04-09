@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
   Walkin = mongoose.model('Walkin'),
   Checkin = mongoose.model('Checkin'),
   mailer = require('./mailer.server.controller.js'),
-  sn = require('./service-now.server.controller.js');
+  sn = require('./service-now.server.controller.js'),
+  system = require('./system.server.controller.js');
 
 mongoose.Promise = global.Promise;
 
@@ -62,7 +63,7 @@ var
           if(err) return console.error(err);
 
           if(count)
-            mailer.send('michael.buchmann@emory.edu', 'Clover: Unclosed Walk-in Tickets', 'Michael',
+            mailer.send(system.setting.admin_email, 'Clover: Unclosed Walk-in Tickets', '',
               'Important: There are ' + count + ' walk-in ticket(s) remains in the queue. Please take action to close them.');
         });
     });

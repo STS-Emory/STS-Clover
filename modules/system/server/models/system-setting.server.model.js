@@ -5,7 +5,17 @@ var mongoose = require('mongoose'),
 
 mongoose.Promise = global.Promise;
 
+var validateEmailFormat = function(email){
+  var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
+  return re.test(email);
+};
+
 var SystemSettingSchema = new Schema({
+  admin_email: {
+    type: String,
+    default: 'michael.buchmann@emory.edu',
+    validate: [validateEmailFormat, 'Please enter a correct email address!']
+  },
   user_wildcard_prefixes : {
     type: [{
       type: String,
