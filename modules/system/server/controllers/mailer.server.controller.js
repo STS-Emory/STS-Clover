@@ -26,7 +26,7 @@ exports.TEMPLATE = {
   CI_LOG: template_directory + '/ServiceLog.json',
   CI_SURVEY: template_directory + '/Survey_Checkin.json',
 
-  PR_WORKSTATIONS: template_directory + '/Problem.json'
+  PR: template_directory + '/ProblemReporting.json'
 };
 exports.ATTACHMENT = {
   CI_LIABILITY: {
@@ -193,7 +193,7 @@ exports.sendREST = function(req, res) {
 exports.reportProblem = function(req, res) {
   var config = req.body, user = req.user;
 
-  jsonfile.readFile(exports.TEMPLATE.PR_WORKSTATIONS, function(err, template) {
+  jsonfile.readFile(exports.TEMPLATE.PR, function(err, template) {
     if (err || !template) {
       console.error(err);
       return res.sendStatus(500);

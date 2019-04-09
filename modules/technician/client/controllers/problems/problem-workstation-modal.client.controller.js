@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('technician').controller('ProblemReportWorkstationController', ['$scope', '$uibModalInstance',
+angular.module('technician').controller('ProblemReportModalController', ['$scope', '$uibModalInstance',
   function ($scope, $uibModalInstance) {
     $scope.input = {};
 
@@ -14,8 +14,10 @@ angular.module('technician').controller('ProblemReportWorkstationController', ['
 
       if (type == 'Workstation' && (!input.detail || input.detail.length != 10))
         $scope.error = 'Please enter the workstation number (3 digits).';
+      else if (type == 'Study Room' && !input.detail)
+        $scope.error = 'Please input the Study Room number.';
       else if (type != 'Workstation' && !input.detail)
-        $scope.error = 'Please select the type of printer or studio';
+        $scope.error = 'Please select the type of printer or studio.';
       else if (!input.description)
         $scope.error = 'Please enter the description of the problem.';
       else if (!input.fixes)
