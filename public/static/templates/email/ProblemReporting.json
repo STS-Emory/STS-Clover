@@ -1,6 +1,6 @@
 {
   "from": "Student Tech Support <nobody@emory.edu>",
-  "to": "sgao26@emory.edu",
+  "to": "sdl-help@emory.edu",
   "subject": "Problem with <DEVICETYPE>: <DEVICENUMBER>",
   "bcc": "stsemory@gmail.com",
   "text": "<b>Description of the problem:</b>\n\n<DESCRIPTION>\n\n<b>Attempted Fixes:</b>\n\n<FIXES>\n\n\nSubmitted by <NAME>, member of STS"
