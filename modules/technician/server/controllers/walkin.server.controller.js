@@ -9,7 +9,8 @@ var fs = require('fs'),
   SITask = mongoose.model('SITask'),
   mailer = require('../../../system/server/controllers/mailer.server.controller.js'),
   sn = require('../../../system/server/controllers/service-now.server.controller.js'),
-  printer = require('../../../system/server/controllers/printer.server.controller.js');
+  printer = require('../../../system/server/controllers/printer.server.controller.js'),
+  users = require('../../../users/server/controllers/users/users.profile.server.controller.js');
 
 var populate_options = [
   { path : 'user', model : 'User', select : 'firstName lastName displayName username phone location verified isWildcard' },
@@ -174,22 +175,12 @@ exports.month = function(req, res) {
     });
 };
 
-var sanitizeUser = function(user, atrributes) {
-  var res = {};
-  for (var attribute in user){
-    if (!atrributes.includes(attribute)){
-      res[attribute] = user[attribute];
-    }
-  }
-  return res;
-};
-
 
 /*----- Instance functions -----*/
 exports.create = function(req, res) {
   var need2CreateUser = req.body.need2CreateUser, walkin = req.body;
   walkin.user.lastVisit = Date.now();
-  walkin.user = sanitizeUser(walkin.user, ['roles', 'password', 'verified', 'isActive', 'salt']);
+  walkin.user = users.sanitizeUser(walkin.user, ['roles', 'password', 'verified', 'isActive', 'salt']);
 
   async.waterfall([
     // Get+Update/Save user
@@ -276,7 +267,7 @@ exports.reassign = function(req, res) {
 };
 
 exports.update = function(req, res) {
-  var original = req.walkin, updated = sanitizeUser(req.body, ['roles', 'password', 'isActive', 'salt']);
+  var original = req.walkin, updated = users.sanitizeUser(req.body, ['roles', 'password', 'isActive', 'salt']);
   var o_user = original.user, u_user = updated.user;
 
   // Check if user information changed

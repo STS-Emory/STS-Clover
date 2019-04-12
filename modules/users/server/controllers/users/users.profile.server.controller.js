@@ -24,6 +24,8 @@ var sanitizeUser = function(user, attributes) {
   return res;
 };
 
+exports.sanitizeUser = sanitizeUser;
+
 exports.update = function (req, res) {
   var user = req.profile; 
   var updated;
