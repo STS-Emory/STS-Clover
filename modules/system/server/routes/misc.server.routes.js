@@ -3,6 +3,6 @@
 module.exports = function (app) {
   var misc = require('../controllers/misc.server.controller.js');
 
-  app.route('/api/misc/updateGroupAssignment').post(misc.updateGroupAssignment);
+  // app.route('/api/misc/updateGroupAssignment').post(misc.updateGroupAssignment);
       
 };

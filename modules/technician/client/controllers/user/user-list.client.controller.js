@@ -76,6 +76,14 @@ angular.module('technician').controller('UserListController', ['$scope', '$http'
         .success(renderUsers);
     };
 
+    $scope.diableEditPhone = function () {
+      return !$scope.isAdmin;
+    };
+
+    $scope.formatPhoneNumber = function (phoneNumber) {
+      return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6);
+    };
+
     $scope.invalid();
   }
 ]);

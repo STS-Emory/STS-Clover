@@ -174,10 +174,22 @@ exports.month = function(req, res) {
     });
 };
 
+var sanitizeUser = function(user, atrributes) {
+  var res = {};
+  for (var attribute in user){
+    if (!atrributes.includes(attribute)){
+      res[attribute] = user[attribute];
+    }
+  }
+  return res;
+};
+
+
 /*----- Instance functions -----*/
 exports.create = function(req, res) {
   var need2CreateUser = req.body.need2CreateUser, walkin = req.body;
   walkin.user.lastVisit = Date.now();
+  walkin.user = sanitizeUser(walkin.user, ['roles', 'password', 'verified', 'isActive', 'salt']);
 
   async.waterfall([
     // Get+Update/Save user
@@ -264,7 +276,7 @@ exports.reassign = function(req, res) {
 };
 
 exports.update = function(req, res) {
-  var original = req.walkin, updated = req.body;
+  var original = req.walkin, updated = sanitizeUser(req.body, ['roles', 'password', 'isActive', 'salt']);
   var o_user = original.user, u_user = updated.user;
 
   // Check if user information changed

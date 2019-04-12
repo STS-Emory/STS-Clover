@@ -7,6 +7,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   passport = require('passport'),
+  jwt = require('jsonwebtoken'),
   User = mongoose.model('User'),
   _ = require('lodash');
 
@@ -27,8 +28,11 @@ exports.signin = function (req, res, next) {
       user.salt = undefined;
 
       req.login(user, function (err) {
-        if (err) res.status(400).send(err);
-        else res.json(user);
+        if (err){
+          res.status(400).send(err);
+        } else{
+          res.json(user);
+        }
       });
     }
   })(req, res, next);

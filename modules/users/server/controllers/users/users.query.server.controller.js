@@ -13,7 +13,13 @@ exports.query = function(req, res) {
       console.error(err);
       return res.sendStatus(500);
     }
-    else res.json(users);
+    else{
+      users.forEach(function(user){
+        user.password = undefined;
+        user.hash = undefined;
+      });
+      res.json(users);
+    }
   });
 };
 

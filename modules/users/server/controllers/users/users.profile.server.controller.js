@@ -14,8 +14,25 @@ var _ = require('lodash'),
 
 mongoose.Promise = global.Promise;
 
+var sanitizeUser = function(user, attributes) {
+  var res = {};
+  for (var attribute in user){
+    if (!attributes.includes(attribute)){
+      res[attribute] = user[attribute];
+    }
+  }
+  return res;
+};
+
 exports.update = function (req, res) {
-  var user = req.profile, updated = req.body;
+  var user = req.profile; 
+  var updated;
+  if (_.intersection(req.user.roles, ['admin']).length === 0){
+    // technicians cannot send requests on role / password change
+    updated = sanitizeUser(req.body, ['roles', 'password', 'isActive', 'hash']);
+  } else{
+    updated = sanitizeUser(req.body, ['password', 'hash']);
+  }
 
   user = _.extend(user, updated);
   user.save(function(err, user){
