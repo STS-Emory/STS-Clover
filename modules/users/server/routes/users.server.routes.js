@@ -15,5 +15,5 @@ module.exports = function (app) {
   app.route('/api/users/update/:username').put(users.hasTechnicianPermission, users.update);
   
   // User validation
-  app.route('/api/users/validate/:username').get(users.hasTechnicianPermission, users.validate);
+  app.route('/api/users/validate/:username').get(users.validate);
 };
