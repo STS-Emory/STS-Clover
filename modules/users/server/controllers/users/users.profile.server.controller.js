@@ -17,7 +17,7 @@ mongoose.Promise = global.Promise;
 var sanitizeUser = function(user, attributes) {
   var res = {};
   for (var attribute in user){
-    if (!attributes.includes(attribute)){
+    if (attributes.indexOf(attribute) == -1){
       res[attribute] = user[attribute];
     }
   }
