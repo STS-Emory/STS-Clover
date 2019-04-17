@@ -56,6 +56,10 @@ exports.notificationCounts = function(req, res) {
     function(callback) {
       SITask.find({ walkin : { $exists: false } })
         .count(function(err, count) { notificationCounts.sitasks = count; callback(err); });
+    },
+    function(callback) {
+      Checkin.find({ isActive : true, status : 'Verification pending' })
+        .count(function(err, count) { notificationCounts.checkins = count; callback(err); });
     }
   ], function(err){
     if(err) {

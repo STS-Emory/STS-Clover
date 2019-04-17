@@ -69,10 +69,11 @@
           </ul>
         </li>
 
-        <li class="dropdown" dropdown uib-dropdown auto-close="disabled" ng-show="notificationCounts.announcements || notificationCounts.chores">
+        <li class="dropdown" dropdown uib-dropdown auto-close="disabled" ng-show="notificationCounts.announcements || notificationCounts.chores || notificationCounts.checkins">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" uib-dropdown-toggle>
             <span style="color: red;" ng-show="notificationCounts.announcements"><i class="fa fa-exclamation-circle"></i>&nbsp;{{notificationCounts.announcements}}</span>&nbsp;
             <span style="color: #ffb400;" ng-show="notificationCounts.chores"><i class="fa fa-tasks"></i>&nbsp;{{(notificationCounts.chores)}}</span>
+            <span style="color: #32CD32;" ng-show="notificationCounts.checkins"><i class="fa fa-stethoscope"></i>&nbsp;{{(notificationCounts.checkins)}}</span>
           </a>
           <ul class="dropdown-menu danger animated fadeInDown" uib-dropdown-menu style="margin-right: -10px;">
             <li class="title" style="background-color: #696969;">Notification</li>
@@ -91,6 +92,12 @@
                 <a href="#" ui-sref="tech.tasks">
                   <li class="list-group-item">
                     <span class="badge warning">{{notificationCounts.chores}}</span> <i class="fa fa-tasks icon"></i> Incomplete Chores
+                  </li>
+                </a>
+                <a href="#" ui-sref="tech.checkin.queue">
+                  <li class="list-group-item">
+                    <span class="badge success">{{notificationCounts.checkins}}</span> <i class="fa fa-stethoscope icon"></i> 
+                    Checkin Verfications
                   </li>
                 </a>
               </ul>

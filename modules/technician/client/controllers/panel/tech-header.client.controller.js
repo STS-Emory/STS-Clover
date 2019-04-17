@@ -25,8 +25,13 @@ angular.module('technician').controller('TechHeaderController', ['$scope', '$sta
 
     $scope.getNotificationCounts = function() {
       var hasNotifications =
-        $scope.notificationCounts.announcements !== undefined && $scope.notificationCounts.chores !== undefined &&
-        ($scope.notificationCounts.announcements !== 0 || $scope.notificationCounts.chores !== 0);
+        $scope.notificationCounts.announcements !== undefined && 
+        $scope.notificationCounts.chores !== undefined &&
+        $scope.notificationCounts.checkins !== undefined &&
+        ($scope.notificationCounts.announcements !== 0 || 
+          $scope.notificationCounts.chores !== 0 || 
+          $scope.notificationCounts.checkins !== 0
+        );
 
       $http.get('/api/technician/dashboard/notification/counts')
         .error(function(){
@@ -34,8 +39,8 @@ angular.module('technician').controller('TechHeaderController', ['$scope', '$sta
           $interval.cancel($scope.autoNotificationCountRetriever);
         })
         .success(function(counts) {
-          if (!hasNotifications && (counts.announcements || counts.chores))
-            alert('You have new incoming announcements or chores.');
+          if (!hasNotifications && (counts.announcements || counts.chores || counts.checkins))
+            alert('You have new incoming announcements or tasks.');
           $scope.notificationCounts = counts;
         });
     };
