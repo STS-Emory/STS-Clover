@@ -8,7 +8,8 @@ var
 
   User = mongoose.model('User'),
   KeyValueList = mongoose.model('KeyValueList'),
-  SystemSetting = mongoose.model('SystemSetting');
+  SystemSetting = mongoose.model('SystemSetting'),
+  exec = require('child_process').exec;
 
 mongoose.Promise = global.Promise;
 
@@ -137,4 +138,12 @@ exports.setting = function(req, res, next){
     else req.setting = setting;
     next();
   });
+};
+
+exports.reboot = function(req, res){
+  var cmd = 'sudo sh scripts/reboot.sh > ../reboot.log';
+
+  exec(cmd, { cwd: __dirname + '/../../../../' });
+
+  res.sendStatus(200);
 };

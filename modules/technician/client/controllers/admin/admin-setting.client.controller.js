@@ -106,5 +106,20 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
           $scope.message.error = 'Failed to save settings.';
         });
     };
+
+    $scope.reboot = function(){
+      var modal = ModalLauncher.launchDefaultMessageModal(
+        'Confirm: Reboot',
+        'Are you sure you want to reboot this instance?'
+      );
+
+      modal.result.then(function (response) {
+        if(response){
+          $http.get('/reboot')
+            .success(window.location.reload())
+            .error(function() { alert('Request failed. Please check console for error.'); });
+        }
+      });
+    };
   }
 ]);

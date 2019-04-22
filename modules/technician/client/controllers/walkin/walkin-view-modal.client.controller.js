@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('system').controller('WalkinViewModalController', ['$scope', '$uibModalInstance', 'data', 'Authentication', '$http', '$timeout',
-  function ($scope, $uibModalInstance, data, Authentication, $http, $timeout) {
+angular.module('system').controller('WalkinViewModalController', ['$scope', '$uibModalInstance', 'data', 'Authentication', 'ModalLauncher', '$http', '$timeout',
+  function ($scope, $uibModalInstance, data, Authentication, ModalLauncher, $http, $timeout) {
     $scope.data = data;
     $scope.user = Authentication.getUser();
 
@@ -27,6 +27,20 @@ angular.module('system').controller('WalkinViewModalController', ['$scope', '$ui
 
         // Initialize resolution template
         $scope.resolutions_options = setting.resolutions_options;
+      });
+    };
+
+    $scope.printLabel = function() {
+      var walkin = $scope.data.walkin;
+      var modal = ModalLauncher.launchDefaultMessageModal(
+        'Confirm: Print Label',
+        'Are you sure you want to print a label for this completed walk-in instance?'
+      );
+      modal.result.then(function (response) {
+        if(response){
+          $http.post('/api/technician/walkin/print/label/' + walkin._id)
+            .error(function() { alert('Request failed. Please check console for error.'); });
+        }
       });
     };
 
