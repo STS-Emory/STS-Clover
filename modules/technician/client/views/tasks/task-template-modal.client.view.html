@@ -1,0 +1,56 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+    <span class="fa fa-close" aria-hidden="true" style="margin: 8px 8px 0 0"></span>
+  </button>
+  <h3 class="modal-title"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Self-Initiated Task Template&nbsp;&nbsp;</h3>
+</div>
+
+<div class="modal-body" style="padding-bottom: 0;">
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Temaplte Name:</div><hr style="margin: 3px 0 8px 0"/> 
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 25px;" ng-model="template.name"></textarea>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Task detail:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="template.task_details"></textarea>
+    </div>
+
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Message display to <u>customer</u>:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="template.customer_message"></textarea>
+
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Message display to <u>technician</u>:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="template.technician_message"></textarea>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Chore instruction:</div><hr style="margin: 3px 0 8px 0"/>
+      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px;" ng-model="template.chore_instruction"></textarea>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
+      <div class="sub-title" style="font-size: 16px;">Place Holders (Case Sensitive):</div>
+      <hr style="margin: 3px 0 8px 0"/>
+      <div>
+        <p>{NAME}: the name of the customer</p> 
+        <p>{PHONE}: the phone number of the customer</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-footer" style="padding: 10px 10px 0 0; margin: 0 0 10px 0; border-top: 0px;">
+  <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>&nbsp;
+  <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="create()"><i class="fa fa-check"></i>&nbsp;&nbsp;OK</button>
+</div>
+

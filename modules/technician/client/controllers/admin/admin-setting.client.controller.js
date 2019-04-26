@@ -96,6 +96,32 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
       });
     };
 
+    $scope.newTaskTemplate = function(templates){
+      var template = {
+        name : '',
+        task_details: '',
+        customer_message: '',
+        technician_message: '',
+        chore_instruction: ''
+      };
+      var modal = ModalLauncher.launchTaskTemplateModal(template);
+      modal.result.then(function(response){
+        if (response){
+          templates.push(response);
+        }
+      });
+    };
+
+    $scope.editTaskTemplate = function(index){
+      var template = $scope.setting.task_templates[index];
+      var modal = ModalLauncher.launchTaskTemplateModal(template);
+      modal.result.then(function(response){
+        if (response){ 
+          $scope.setting.task_templates[index] = response;
+        }
+      });
+    };
+
     $scope.save = function(){
       $http.put('/templates/setting', $scope.setting)
         .success(function(){

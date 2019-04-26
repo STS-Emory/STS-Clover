@@ -9,6 +9,7 @@ var
   User = mongoose.model('User'),
   KeyValueList = mongoose.model('KeyValueList'),
   SystemSetting = mongoose.model('SystemSetting'),
+  TaskTemplate = mongoose.model('TaskTemplate'),
   exec = require('child_process').exec;
 
 mongoose.Promise = global.Promise;
@@ -16,7 +17,8 @@ mongoose.Promise = global.Promise;
 // Module variables
 var popOpt = [
   { path: 'device_options', model: 'KeyValueList', select: 'key values' },
-  { path: 'computer_options', model: 'KeyValueList', select: 'key values' }
+  { path: 'computer_options', model: 'KeyValueList', select: 'key values' },
+  { path: 'task_templates', model: 'TaskTemplate' }
 ];
 
 exports.init = function(){
@@ -92,6 +94,7 @@ exports.update = function(req, res){
 
   async.waterfall([
     async.apply(function(setting, callback){
+      // Update the computer options
       for(i = 0; i < setting.computer_options.length; i++)
         if(!setting.computer_options[i]._id)
           setting.computer_options[i] = new KeyValueList(setting.computer_options[i]);
@@ -103,6 +106,7 @@ exports.update = function(req, res){
     }, new_setting),
 
     function(setting, callback){
+      // Update the device options
       for(i = 0; i < setting.device_options.length; i++)
         if(!setting.device_options[i]._id)
           setting.device_options[i] = new KeyValueList(setting.device_options[i]);
@@ -111,7 +115,20 @@ exports.update = function(req, res){
         KeyValueList.update({ _id : option._id }, option, { upsert: true },
           function(err){ next(err, option); });
       }, function(err){ callback(err, setting); });
+    },
+    
+    function(setting, callback){
+      // Update the task templates
+      for(i = 0; i < setting.task_templates.length; i++)
+        if(!setting.task_templates[i]._id)
+          setting.task_templates[i] = new TaskTemplate(setting.task_templates[i]);
+
+      async.map(setting.task_templates, function(template, next){
+        TaskTemplate.update({ _id : template._id }, template, { upsert: true },
+          function(err){ next(err, template); });
+      }, function(err){ callback(err, setting); });
     }
+    
   ],
   function(err, setting){
     if(!err){

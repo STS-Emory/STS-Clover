@@ -4,15 +4,21 @@ var _ = require('lodash'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Chore = mongoose.model('Chore'),
-  SITask = mongoose.model('SITask');
+  SITask = mongoose.model('SITask'),
+  SystemSetting = mongoose.model('SystemSetting');
 
 var populate_options = [
-  { path : 'createdBy', model : 'User', select : 'username displayName' }, { path : 'chores', model : 'Chore' }
+  { path : 'createdBy', model : 'User', select : 'username displayName' }, 
+  { path : 'chores', model : 'Chore' }
 ];
 
 var populate_options_chore = [
   { path : 'chores.createdBy', model : 'User', select : 'firstName lastName displayName username' },
   { path : 'chores.completedBy', model : 'User', select : 'firstName lastName displayName username' }
+];
+
+var template_options = [
+  { path : 'task_templates', model: 'TaskTemplate' }
 ];
 
 mongoose.Promise = global.Promise;
@@ -68,6 +74,15 @@ exports.sitaskByUsername = function (req, res) {
         });
       }
     });
+};
+
+exports.settings = function (req, res){
+  SystemSetting.findOne({}, '-updated').populate(template_options).exec(function(err, setting){
+    if(err) req.setting = null;
+    else {
+      res.json(setting.task_templates);
+    }
+  });
 };
 
 exports.query = function(req, res) {

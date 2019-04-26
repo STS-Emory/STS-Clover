@@ -16,6 +16,13 @@ var SystemSettingSchema = new Schema({
     default: 'michael.buchmann@emory.edu',
     validate: [validateEmailFormat, 'Please enter a correct email address!']
   },
+  task_templates: {
+    type: [{
+      type: Schema.ObjectId,
+      ref: 'TaskTemplate'
+    }],
+    default: []
+  },
   user_wildcard_prefixes : {
     type: [{
       type: String,
