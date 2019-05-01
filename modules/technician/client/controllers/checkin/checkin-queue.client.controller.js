@@ -9,7 +9,7 @@ angular.module('technician').controller('CheckinQueueController', ['$scope', '$h
     $scope.init = function() {
       $http.get('/api/technician/checkin/setting/queue')
         .error(function() { alert('Request failed. Please check console for error.'); })
-        .success(function(setting) { $scope.setting = setting; });
+        .success(function(setting) { $scope.setting = setting; console.log(setting); });
       $scope.loadQueue();
     };
 

@@ -16,6 +16,13 @@ var SystemSettingSchema = new Schema({
     default: 'michael.buchmann@emory.edu',
     validate: [validateEmailFormat, 'Please enter a correct email address!']
   },
+  checkin_templates: {
+    type: [{
+      type: Schema.ObjectId,
+      ref: 'KeyValueList'
+    }],
+    default: []
+  },
   task_templates: {
     type: [{
       type: Schema.ObjectId,

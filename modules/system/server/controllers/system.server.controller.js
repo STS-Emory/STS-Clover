@@ -18,6 +18,7 @@ mongoose.Promise = global.Promise;
 var popOpt = [
   { path: 'device_options', model: 'KeyValueList', select: 'key values' },
   { path: 'computer_options', model: 'KeyValueList', select: 'key values' },
+  { path: 'checkin_templates', model: 'KeyValueList', select: 'key values' },
   { path: 'task_templates', model: 'TaskTemplate' }
 ];
 
@@ -112,6 +113,20 @@ exports.update = function(req, res){
           setting.device_options[i] = new KeyValueList(setting.device_options[i]);
 
       async.map(setting.device_options, function(option, next){
+        KeyValueList.update({ _id : option._id }, option, { upsert: true },
+          function(err){ next(err, option); });
+      }, function(err){ callback(err, setting); });
+    },
+
+    function(setting, callback){
+      // Update the checkin template options
+      for(i = 0; i < setting.checkin_templates.length; i++)
+        if(!setting.checkin_templates[i]._id){
+          setting.checkin_templates[i].sorted = false;
+          setting.checkin_templates[i] = new KeyValueList(setting.checkin_templates[i]);
+        }
+
+      async.map(setting.checkin_templates, function(option, next){
         KeyValueList.update({ _id : option._id }, option, { upsert: true },
           function(err){ next(err, option); });
       }, function(err){ callback(err, setting); });

@@ -122,6 +122,35 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
       });
     };
 
+    $scope.newCheckInTemplate = function(checkin_templates){
+      var template = ModalLauncher.launchDefaultInputModal(
+          'New Checkin Template',
+          'Please enter the name of this checkin workflow',
+          'Name of the checkin workflow here');
+      template.result.then(function(response){
+        if (response){
+          checkin_templates.push({ key: response, values: [] });
+        }
+      });
+    };
+
+    $scope.newCheckInTask = function(option){
+      var options = ['At Beginning'];
+      for (var i = 0; i < option.values.length; i++){
+        options.push('After ' + option.values[i]);
+      }
+      var task = ModalLauncher.launchInsertModal(
+          'New Checkin Task for ' + option.key,
+          'Please enter a task for this template',
+          'Name of the task here',
+          options);
+      task.result.then(function(response){
+        if (response){
+          option.values.splice(response.index, 0, response.data);
+        }
+      });
+    };
+
     $scope.save = function(){
       $http.put('/templates/setting', $scope.setting)
         .success(function(){

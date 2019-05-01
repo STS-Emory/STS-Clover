@@ -15,6 +15,10 @@ var KeyValueListSchema = new Schema({
     type: [{ type: String, trim: true }],
     default: []
   },
+  sorted : {
+    type: Boolean,
+    default: true
+  },
   updated : {
     type: Date,
     default: Date.now()
@@ -23,7 +27,10 @@ var KeyValueListSchema = new Schema({
 
 KeyValueListSchema.pre('save', function (next) {
   this.updated = Date.now();
-  this.values.sort(); next();
+  if (this.sorted){
+    this.values.sort();
+  }
+  next();
 });
 
 mongoose.model('KeyValueList', KeyValueListSchema);

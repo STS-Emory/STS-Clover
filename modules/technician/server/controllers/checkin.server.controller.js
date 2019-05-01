@@ -7,7 +7,9 @@ var fs = require('fs'),
   User = mongoose.model('User'),
   Walkin = mongoose.model('Walkin'),
   Checkin = mongoose.model('Checkin'),
+  KeyValueList = mongoose.model('KeyValueList'),
   ServiceEntry = mongoose.model('ServiceEntry'),
+
   mailer = require('../../../system/server/controllers/mailer.server.controller.js'),
   sn = require('../../../system/server/controllers/service-now.server.controller.js'),
   printer = require('../../../system/server/controllers/printer.server.controller.js');
@@ -33,6 +35,41 @@ var workflow_templates_path = 'config/templates/checkin/workflow_templates.json'
 
 mongoose.Promise = global.Promise;
 
+var initializeCheckinTemplate = function(system){
+  async.each(workflow_templates, function(entry, callback){
+    var d = new KeyValueList({ key: entry.name, values: entry.tasks, sorted: false });
+
+    d.save(function(err, doc){
+      if (!err){
+        system.checkin_templates.push(doc._id);
+      }
+      callback(err);
+    });
+  }, function(err){
+    if (err){
+      console.error(err);
+    } else{
+      system.save(function(err){
+        if (err){
+          console.error(err);
+        }
+      });
+    }
+  });
+
+};
+
+var templateFromKeyValueList = function(kvList){
+  var res = [];
+  for (var i = 0; i < kvList.length; i++) {
+    var temp = {};
+    temp.name = kvList[i].key;
+    temp.tasks = kvList[i].values;
+    res.push(temp);
+  }
+  return res;
+};
+
 exports.getCheckinTransferSetting = function(req, res) {
   var system = req.setting, setting = {};
   
@@ -46,7 +83,13 @@ exports.getCheckinQueueSetting = function(req, res) {
   var system = req.setting, setting = {};
 
   setting.checkin_items = system.checkin_items;
-  setting.templates = workflow_templates;
+
+  if (system.checkin_templates.length === 0){
+    setting.templates = workflow_templates;
+    initializeCheckinTemplate(system);
+  } else{
+    setting.templates = templateFromKeyValueList(system.checkin_templates);
+  }
   
   res.json(setting);
 };

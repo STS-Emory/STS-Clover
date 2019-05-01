@@ -343,6 +343,10 @@ angular.module('technician').controller('WalkinQueueController', ['$scope', '$ht
         $scope.error = 'Please provide more detail for resolution (at lease 25 characters).';
         $timeout(function(){ $scope.error = $scope.success = undefined; }, 5000);
       }
+      else if (!$scope.selected.user.verified && !$scope.user.isAdmin){
+        $scope.error = 'Please visit online directory to confirm user\'s NetID.';
+        $timeout(function(){ $scope.error = $scope.success = undefined; }, 5000);
+      }
       else {
         $http.put('/api/technician/walkin/resolve/'+$scope.selected._id, $scope.selected)
           .error(function() { alert('Request failed. Please view console for error.'); })

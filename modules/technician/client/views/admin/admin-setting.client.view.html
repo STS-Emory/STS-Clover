@@ -30,7 +30,30 @@
             {{idx+1}}. {{template.name}} <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.task_templates.splice(idx,1)"></a> <a class="fa fa-pencil pull-right" style="margin-top: 2px;" ng-click="editTaskTemplate(idx)"></a>
           </li>
         </ul>
+
+        <h4>Checkin Templates
+          <button class="btn btn-xs btn-warning pull-right" style="margin: -5px 0 0 0;" ng-click="newCheckInTemplate(setting.checkin_templates)">New</button>
+        </h4>
+        <ul class="list-group">
+          <li class="list-group-item" ng-show="setting.checkin_templates.length == 0" style="padding: 3px 10px;">None</li>
+          <li class="list-group-item" ng-repeat="(idx, option) in setting.checkin_templates" style="padding: 3px 10px;">
+            {{idx+1}}. {{option.key}}
+            <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="setting.checkin_templates.splice(idx,1)"></a>
+            <a class="fa fa-plus pull-right" style="margin-top: 2px;" ng-click="newCheckInTask(option)"></a>
+
+            <ul class="list-group" style="margin-top: 3px; margin-bottom: 0px;">
+              <li class="list-group-item" ng-show="option.values.length == 0" style="padding: 3px 10px;">None</li>
+              <li class="list-group-item" ng-repeat="(num, task) in option.values" style="padding: 3px 10px;">
+                  <p> {{num+1}}.{{task}}
+                  <a class="fa fa-times pull-right" style="margin-top: 2px;" ng-click="option.values.splice(num,1)"></a>
+                  </p>
+              </li>
+                
+            </ul>
+          </li>
+        </ul>
       </div>
+
     </div>
   </div>
   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

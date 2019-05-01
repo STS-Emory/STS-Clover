@@ -126,6 +126,16 @@ angular.module('system').service('ModalLauncher', ['$uibModal',
       });
     };
 
+    this.launchInsertModal = function(title, message, placeholder, options){
+      return $uibModal.open({
+        animation: true, size: 'lg', backdrop: 'static',
+        controller: 'InsertModalController',
+        windowClass: 'fade modal-warning panel-center-modal',
+        templateUrl: 'modules/technician/client/views/admin/insert.modal.view.html',
+        resolve: { data: function(){ return { title: title, message: message, placeholder: placeholder, options: options }; } }
+      });
+    };
+
     // Return a promise
     this.launchDefaultInputModal = function(title, message, placeholder){
       return $uibModal.open({
