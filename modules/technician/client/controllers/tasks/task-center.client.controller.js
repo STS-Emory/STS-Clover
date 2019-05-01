@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('technician').controller('TaskCenterController', ['$scope', '$state', '$http', 'ModalLauncher',
-  function ($scope, $state, $http, ModalLauncher) {
+angular.module('technician').controller('TaskCenterController', ['$scope', '$state', '$http', 'Authentication', 'ModalLauncher',
+  function ($scope, $state, $http, Authentication, ModalLauncher) {
+    $scope.isAdmin = Authentication.hasAdminPerm();
 
     $scope.init = function() {
       $scope.listChores_today();
@@ -98,6 +99,25 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
         .success(function(sitask) { ModalLauncher.launchSITaskViewModal(sitask); })
         .error(function() { alert('Server error when fetching STS task.'); });
 
+    };
+
+    $scope.editSITask = function(sitask) {
+      $http.get('/api/tech/sitask/view/' + sitask._id)
+        .success(function(sitask) { 
+          var modal = ModalLauncher.launchSITaskEditModal(sitask);
+
+          modal.result.then(function(result){
+            if (result){
+              $http.post('/api/tech/sitask/update/' + result._id, result).success(
+                function(sitask) {
+                  $scope.listChores_today();
+                  $scope.listSITasks_incomplete();
+                }
+              );
+            }
+          }); 
+        })
+        .error(function() { alert('Server error when fetching STS task.'); });
     };
 
     $scope.viewWalkin = function(id){

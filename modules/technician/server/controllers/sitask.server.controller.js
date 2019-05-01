@@ -2,6 +2,7 @@
 
 var _ = require('lodash'),
   mongoose = require('mongoose'),
+  async = require('async'),
   User = mongoose.model('User'),
   Chore = mongoose.model('Chore'),
   SITask = mongoose.model('SITask'),
@@ -50,9 +51,19 @@ exports.update = function(req, res) {
   var sitask = req.sitask, updates = req.body;
   sitask = _.extend(sitask, updates);
 
-  sitask.save(function(err, sitask) {
-    if(err){ console.error(err); res.sendStatus(500); }
-    else res.json(sitask);
+  async.each(sitask.chores, function(chore, callback){
+    Chore.update({ _id: chore._id }, chore, { upsert: true },function(err){
+      callback(err);
+    });
+  }, function(err){
+    if (err){
+      console.error(err);
+    } else{
+      sitask.save(function(err, sitask) {
+        if(err){ console.error(err); res.sendStatus(500); }
+        else res.json(sitask);
+      });
+    }
   });
 };
 

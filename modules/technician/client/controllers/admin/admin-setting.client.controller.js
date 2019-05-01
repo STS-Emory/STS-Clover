@@ -142,7 +142,7 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
       var task = ModalLauncher.launchInsertModal(
           'New Checkin Task for ' + option.key,
           'Please enter a task for this template',
-          'Name of the task here',
+          'Content of the task here',
           options);
       task.result.then(function(response){
         if (response){

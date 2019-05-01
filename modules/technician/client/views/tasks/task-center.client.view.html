@@ -34,7 +34,8 @@
             <td style="padding: 0; line-height: 38px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;">
               {{ sitask.description }}
             </td>
-            <td style="text-align: center">
+            <td style="text-align: right; width: 200px;">
+              <button class="btn btn-xs btn-warning" ng-show="isAdmin" style="margin: 0" ng-click="editSITask(sitask);">Edit</button>
               <button class="btn btn-xs btn-primary" style="margin: 0" ng-click="viewSITask(sitask);">View</button>
               <button ng-show="!sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="createSITaskChore($index, sitask)"
                       tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Create Chore">

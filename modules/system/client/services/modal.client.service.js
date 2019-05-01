@@ -116,6 +116,16 @@ angular.module('system').service('ModalLauncher', ['$uibModal',
       });
     };
 
+    this.launchSITaskEditModal = function(sitask) {
+      return $uibModal.open({
+        animation: true, size: 'lg', backdrop: 'static',
+        controller: 'SITaskEditModalController',
+        windowClass: 'fade modal-warning panel-center-modal',
+        templateUrl: 'modules/technician/client/views/tasks/sitask-edit-modal.client.view.html',
+        resolve: { data: function(){ return { sitask : sitask }; } }
+      });
+    };
+
     this.launchTaskTemplateModal = function(template) {
       return $uibModal.open({
         animation: true, size: 'lg', backdrop: 'static', keyboard: false,
