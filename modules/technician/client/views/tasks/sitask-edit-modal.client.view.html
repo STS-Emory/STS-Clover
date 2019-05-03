@@ -17,7 +17,7 @@
       <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px; overflow: auto;" ng-model="data.sitask.msg_DisplayCustomer"></textarea>
 
       <div class="sub-title" style="font-size: 16px; margin-top: 80px;">Notification to <u>customer</u>:</div><hr style="margin: 3px 0 8px 0"/>
-      <textarea class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px; overflow: auto;" ng-model="data.sitask.msg_NotifyCustomer"></textarea>
+      <textarea readonly class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 80px; overflow: auto;" ng-model="data.sitask.msg_NotifyCustomer"></textarea>
     </div>
 
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 15px;">
@@ -30,7 +30,7 @@
         <tbody>
           <tr ng-repeat="chore in data.sitask.chores">
             <td style="line-height: 22px; word-wrap: break-word; max-width: 0px;">
-              <textarea ng-model="chore.instruction"></textarea>
+              <textarea ng-readonly="chore.completed" ng-model="chore.instruction"></textarea>
             </td>
             <td style="width: 150px;">
 
