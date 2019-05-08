@@ -90,7 +90,9 @@ var SystemSettingSchema = new Schema({
 });
 
 SystemSettingSchema.pre('save', function (next) {
-  this.updated = Date.now(); next();
+  this.updated = Date.now(); 
+  this.location_options.sort();
+  next();
 });
 
 mongoose.model('SystemSetting', SystemSettingSchema);

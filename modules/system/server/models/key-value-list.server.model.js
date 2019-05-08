@@ -26,6 +26,8 @@ var KeyValueListSchema = new Schema({
 });
 
 KeyValueListSchema.pre('save', function (next) {
+  // TODO: This middleware is not working as expected. Fix if possible
+  // Reference: https://github.com/Automattic/mongoose/issues/2672
   this.updated = Date.now();
   if (this.sorted){
     this.values.sort();
