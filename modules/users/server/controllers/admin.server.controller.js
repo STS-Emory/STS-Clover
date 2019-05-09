@@ -6,11 +6,47 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Message = mongoose.model('Message'),
   _ = require('lodash'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 
 mongoose.Promise = global.Promise;
+
+var setUpMessage = function(user) {
+  if (user.roles.indexOf('technician') >= 0){
+    // find all messages
+    Message.find({ type : 'announcement' }, function(err, res){
+      var dict = {};
+      for (var i = 0; i < res.length; i++){
+        dict[res[i].message] = res[i].from;
+      }
+
+      // Find the messages user has already have notifications
+      Message.find({ type : 'announcement', to: user._id }, function(err, user_messages){
+        var added = new Set();
+
+        for (var i = 0; i < user_messages.length; i++){
+          added.add(user_messages[i].message);
+        }
+
+        var err_function = function(err){
+          console.error(err);
+        };
+
+        // Create new messages for users
+        for (var message in dict){
+          // Filter the messages alrady exists
+          if (!added.has(message)){
+            var new_message = new Message({ from: dict[message], to: user, type: 'announcement', message: message });
+            new_message.save(err_function);
+          }
+        }
+      });
+    });
+  }
+};
+
 /**
  * Signup
  */
@@ -35,6 +71,8 @@ exports.registerUser = function (req, res) {
           else existedUser.password = undefined;
 
           res.json(existedUser);
+
+          setUpMessage(existedUser);
         }
       });
     }
@@ -54,6 +92,8 @@ exports.registerUser = function (req, res) {
           else user.password = undefined;
 
           res.json(user);
+
+          setUpMessage(user);
         }
       });
     }
