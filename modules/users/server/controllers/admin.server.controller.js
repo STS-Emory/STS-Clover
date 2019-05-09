@@ -19,7 +19,16 @@ var setUpMessage = function(user) {
     Message.find({ type : 'announcement' }, function(err, res){
       var dict = {};
       for (var i = 0; i < res.length; i++){
-        dict[res[i].message] = res[i].from;
+        if (!dict[res[i].message]){
+          dict[res[i].message] = {
+            message: res[i].message, 
+            to: user, 
+            type: 'announcement', 
+            from: res[i].from, 
+            created: res[i].created 
+          };
+        }
+        
       }
 
       // Find the messages user has already have notifications
@@ -38,7 +47,7 @@ var setUpMessage = function(user) {
         for (var message in dict){
           // Filter the messages alrady exists
           if (!added.has(message)){
-            var new_message = new Message({ from: dict[message], to: user, type: 'announcement', message: message });
+            var new_message = new Message(dict[message]);
             new_message.save(err_function);
           }
         }
