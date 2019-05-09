@@ -19,13 +19,14 @@ var setUpMessage = function(user) {
     Message.find({ type : 'announcement' }, function(err, res){
       var dict = {};
       for (var i = 0; i < res.length; i++){
-        if (!dict[res[i].message]){
+        if (!dict[res[i].message] && res[i].to){
           dict[res[i].message] = {
             message: res[i].message, 
             to: user, 
             type: 'announcement', 
             from: res[i].from, 
-            created: res[i].created 
+            created: res[i].created,
+            read: Date.now()
           };
         }
         
