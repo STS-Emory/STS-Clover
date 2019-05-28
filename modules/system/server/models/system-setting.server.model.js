@@ -91,7 +91,16 @@ var SystemSettingSchema = new Schema({
 
 SystemSettingSchema.pre('save', function (next) {
   this.updated = Date.now(); 
+
+  // Keeping the location options sorted with Off Campus Option in the end
+  var index = this.location_options.indexOf('Off campus');
+  if (index >= 0){
+    this.location_options.splice(index, 1);
+  }
   this.location_options.sort();
+  if (index >= 0){
+    this.location_options.push('Off campus');
+  }
   next();
 });
 

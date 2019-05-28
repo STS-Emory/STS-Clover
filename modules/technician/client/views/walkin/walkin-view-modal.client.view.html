@@ -142,7 +142,7 @@
     </div>
     <div class="modal-footer">
       <span class="pull-left" style="margin: 8px 0 0 6px;">
-        <button class="btn btn-xs btn-success" ng-show="user.isAdmin&&!data.walkin.snValue" ng-click="servicenowSync()">SN Sync</button>
+        <button class="btn btn-xs btn-success" ng-show="user.isAdmin&&!data.walkin.snValue&&data.walkin.status==='Completed'" ng-click="servicenowSync()">SN Sync</button>
         <label class="label label-success" ng-show="data.walkin.snValue" style="font-size: 12px;"
           tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="ServiceNow reference">SN: {{data.walkin.snValue}}</label>
 
