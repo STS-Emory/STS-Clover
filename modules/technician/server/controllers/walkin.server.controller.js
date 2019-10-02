@@ -207,10 +207,10 @@ exports.create = function(req, res) {
         });
     }],
     
-    function(err, walkin){
-      if(err){ console.error(err); return res.sendStatus(500); }
-      else res.json(walkin);
-    });
+  function(err, walkin){
+    if(err){ console.error(err); return res.sendStatus(500); }
+    else res.json(walkin);
+  });
 };
 
 exports.duplicate = function(req, res) {

@@ -25,9 +25,9 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
 
     $scope.newWildcardNetIDPrefix = function(prefixes){
       var prefix = ModalLauncher.launchDefaultInputModal(
-          'New Wildcard NetID Prefix',
-          'Please enter the prefix of the wildcard NetID you wish to add.',
-          'Prefix of wildcard NetID here');
+        'New Wildcard NetID Prefix',
+        'Please enter the prefix of the wildcard NetID you wish to add.',
+        'Prefix of wildcard NetID here');
       prefix.result.then(function(response){
         prefixes.push(response);
       });
@@ -35,9 +35,9 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
 
     $scope.newLocationOption = function(options){
       var location = ModalLauncher.launchDefaultInputModal(
-          'New Location Option',
-          'Please enter the name of the location you wish to add.',
-          'Name of location NetID here');
+        'New Location Option',
+        'Please enter the name of the location you wish to add.',
+        'Name of location NetID here');
       location.result.then(function(response){
         options.push(response);
       });
@@ -58,7 +58,7 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
         'Change Admin Email',
         'Please enter the new email for Admin. The address is used for recieving notifications from the system.',
         setting.admin_email
-        );
+      );
       email.result.then(function(response){
         if (response){
           setting.admin_email = response;
@@ -78,9 +78,9 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
 
     $scope.newDeviceCategory = function(categories){
       var category = ModalLauncher.launchDefaultInputModal(
-          'New Computer/Device Category',
-          'Please enter the name of the computer/device category you wish to add.',
-          'Name of the computer/device category here');
+        'New Computer/Device Category',
+        'Please enter the name of the computer/device category you wish to add.',
+        'Name of the computer/device category here');
       category.result.then(function(response){
         categories.push({ key: response, values: [] });
       });
@@ -88,9 +88,9 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
 
     $scope.newDeviceType = function(category){
       var type = ModalLauncher.launchDefaultInputModal(
-          'New Computer/Device Type',
-          'Please enter the name of the computer/ device type you wish to add.',
-          'Name of the computer/device type here');
+        'New Computer/Device Type',
+        'Please enter the name of the computer/ device type you wish to add.',
+        'Name of the computer/device type here');
       type.result.then(function(response){
         category.values.push(response);
       });
@@ -124,9 +124,9 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
 
     $scope.newCheckInTemplate = function(checkin_templates){
       var template = ModalLauncher.launchDefaultInputModal(
-          'New Checkin Template',
-          'Please enter the name of this checkin workflow',
-          'Name of the checkin workflow here');
+        'New Checkin Template',
+        'Please enter the name of this checkin workflow',
+        'Name of the checkin workflow here');
       template.result.then(function(response){
         if (response){
           checkin_templates.push({ key: response, values: [] });
@@ -140,10 +140,10 @@ angular.module('technician.admin').controller('AdminSettingController', ['$scope
         options.push('After ' + option.values[i]);
       }
       var task = ModalLauncher.launchInsertModal(
-          'New Checkin Task for ' + option.key,
-          'Please enter a task for this template',
-          'Content of the task here',
-          options);
+        'New Checkin Task for ' + option.key,
+        'Please enter a task for this template',
+        'Content of the task here',
+        options);
       task.result.then(function(response){
         if (response){
           option.values.splice(response.index, 0, response.data);

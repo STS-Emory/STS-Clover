@@ -1,13 +1,13 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  autoIncrement = require('mongoose-auto-increment'),
+  autoIncrement = require('mongoose-plugin-autoinc'),
   Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
 // Plugin initialization
-autoIncrement.initialize(mongoose.connection);
+//autoIncrement.initialize(mongoose.connection);
 
 var WalkinSchema = new Schema({
   //Basic instance information

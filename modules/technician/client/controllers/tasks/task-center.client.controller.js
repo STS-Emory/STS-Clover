@@ -28,7 +28,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
     $scope.listChores_dateQuery = function(date) {
       var date_start = new Date(date).getTime(), date_end = date_start + 1000*60*60*24;
       var query = { '$or' : [{ created: { '$gte': date_start, '$lte': date_end } },
-                             { completed: { '$gte': date_start, '$lte': date_end } }] };
+        { completed: { '$gte': date_start, '$lte': date_end } }] };
       $http.post('/api/tech/chore/query', query)
         .success(function(chores) { $scope.chores = chores; })
         .error(function() { alert('Server error when fetching chores.'); });
