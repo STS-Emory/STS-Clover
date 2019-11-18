@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "acl": "~0.4.9",
+    "angular": "^1.7.8",
     "async": "~1.5.2",
     "body-parser": "^1.19.0",
     "bower": "~1.7.7",
@@ -79,7 +80,7 @@
     "grunt-contrib-copy": "~0.8.0",
     "grunt-contrib-csslint": "~0.4.0",
     "grunt-contrib-cssmin": "~0.12.3",
-    "grunt-contrib-jshint": "~0.11.2",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-contrib-less": "~1.0.1",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "~0.9.1",

@@ -18,6 +18,7 @@
     "ApplicationConfiguration": true
   },
   "predef": [ // Extra globals.
+    "angular",
     "inject",
     "by",
     "browser",
