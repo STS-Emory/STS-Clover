@@ -80,7 +80,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
 
     $scope.querying_sitask = false;
     $scope.$watch('sitask_netid', function(netid) {
-      if(netid && netid.length >= 4) {
+      if(netid && netid.length >= 1) {
         $scope.querying_sitask = true;
 
         var query = { username : { '$regex' : netid, '$options': 'i' } };
@@ -93,6 +93,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
         $scope.listSITasks_incomplete();
       }
     });
+
 
     $scope.viewSITask = function(sitask) {
       $http.get('/api/tech/sitask/view/' + sitask._id)
@@ -126,6 +127,63 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
         .success(function(walkin) {
           ModalLauncher.launchWalkinViewModal(walkin);
         });
+    };
+    $scope.selectedTask = [];
+    $scope.checkAll = false;
+
+    $scope.exist =function(sitask){return $scope.selectedTask.indexOf(sitask)> -1;};
+    $scope.checkSITask = function(sitask){
+      var idx = $scope.selectedTask.indexOf(sitask);
+      if(idx> -1) $scope.selectedTask.splice(idx,1);
+      else $scope.selectedTask.push(sitask);
+
+    };
+
+    $scope.selectAll = function() {
+      if (!$scope.checkAll) {
+        $scope.selectedTask = [];
+        //set all row selected
+      } else {
+        angular.forEach($scope.sitasks, function(sitask) {
+          var idx = $scope.selectedTask.indexOf(sitask);
+          if (idx >= 0) return true;
+          else $scope.selectedTask.push(sitask);
+        });
+      }
+    };
+
+    $scope.hideButtons = true;
+    $scope.$watch('selectedTask.length', function (size){
+      if(size>1) $scope.hideButtons = false;
+      else $scope.hideButtons =true;
+      console.log($scope.selectedTask);
+    });
+
+    $scope.delete = function(sitask){
+      var modal = ModalLauncher.launchDefaultWarningModal(
+        'Confirm: Delete',
+        'Are you sure you want to delete this task?'
+      );
+      modal.result.then(function (response) {
+        if(response){
+          $http.post('/delete', sitask)
+            .success(window.location.reload())
+            .error(function(){alert('Failed request. Check console for the error.');});
+        }
+      });
+    };
+
+    $scope.deleteMany= function () {
+      var modal = ModalLauncher.launchDefaultWarningModal(
+        'Confirm: Delete',
+        'Are you sure you want to delete '+$scope.selectedTask.length+' task?');
+      modal.result.then(function (response) {
+        if(response){
+          $http.post('/deleteMany', $scope.selectedTask)
+            .success(window.location.reload())
+            .error(function(){alert('Failed request. Check console for the error.');});
+        }
+      });
     };
   }
 ]);

@@ -157,7 +157,7 @@ angular.module('technician').controller('WalkinQueueController', ['$scope', '$ht
       var modal = ModalLauncher.launchDefaultMessageModal('Confirmation: Customer not eligible',
         'This will mark the instance as \'Unresolved\'. The customer will also be marked as invalid. ' +
         'Are you sure that the customer is not eligible for service? (This action is not reversible)');
-
+      
       modal.result.then(function(response) {
         if(response) {
           $http.put('/api/technician/walkin/notEligible/'+$scope.selected._id)
@@ -172,6 +172,7 @@ angular.module('technician').controller('WalkinQueueController', ['$scope', '$ht
             });
         }
       });
+  
     };
     
     $scope.toHouseCall = function() {

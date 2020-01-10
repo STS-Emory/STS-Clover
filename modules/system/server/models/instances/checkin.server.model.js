@@ -164,5 +164,5 @@ CheckinSchema.pre('save', function(next) {
   next();
 });
 
-CheckinSchema.plugin(autoIncrement.plugin, 'Checkin');
+CheckinSchema.plugin(autoIncrement.plugin,{ model:'Checkin', startAt:40000 });
 mongoose.model('Checkin', CheckinSchema);

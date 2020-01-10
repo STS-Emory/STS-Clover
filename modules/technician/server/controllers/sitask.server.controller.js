@@ -36,7 +36,7 @@ exports.create = function(req, res) {
 
 exports.list = function(req, res) {
   SITask.find({ walkin : { $exists : false } }).populate(populate_options)
-    .sort({ created : 1 }).exec(function(err, sitasks) {
+    .sort({ created : -1 }).exec(function(err, sitasks) {
       if(err) { console.error(err); res.sendStatus(500); }
       else {
         Chore.populate(sitasks, populate_options_chore, function (err, sitasks) {
@@ -75,7 +75,7 @@ exports.sitaskByUsername = function (req, res) {
   var username = req.params.username;
 
   SITask.find({ username : username, walkin : { $exists : false } })
-    .sort({ created : 1 }).populate(populate_options)
+    .sort({ created : -1 }).populate(populate_options)
     .exec(function(err, sitask) {
       if(err){ console.error(err); res.sendStatus(500); }
       else {
@@ -121,4 +121,31 @@ exports.sitaskById = function(req, res, next, sitaskId) {
         });
       }
     });
+};
+
+exports.deleteSITask = function(req, res){
+  var sitaskId= req.body._id;
+  SITask.findByIdAndRemove(sitaskId, function(sitask, err){
+    if (err) console.log(err);
+    else{ 
+      res.sendStatus(200);
+      console.log('Sitask Deleted: '+'\n'+req.body.description);}
+  });
+};
+
+exports.deleteMany =function (req, res) {
+  var entries = [];
+  if(req.body){
+    var arr = req.body;
+    arr.forEach(function(item){
+      entries.push(item._id);
+    });
+  }
+  SITask.deleteMany({ _id: { $in:entries} }).then( function (err) {
+    if(err) console.log(err);
+    else{
+      res.select(200);
+      console.log(req.body.length + "Sitask Deleted");
+    }
+  });
 };

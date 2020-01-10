@@ -114,8 +114,9 @@ var WalkinSchema = new Schema({
 
 WalkinSchema.pre('save', function(next) {
   this.updated = Date.now(); next();
+
 });
 
 
-WalkinSchema.plugin(autoIncrement.plugin, 'Walkin');
+WalkinSchema.plugin(autoIncrement.plugin, { model:'Walking', startAt:20000 });
 mongoose.model('Walkin', WalkinSchema);

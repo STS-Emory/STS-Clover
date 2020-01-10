@@ -610,7 +610,9 @@ section.login-page .login-box > .row {
       margin-bottom: 0; }
 section.login-page .login-form {
     padding: 0em;
-    box-shadow: 0 0px 20px gray;
+    box-shadow: 0 0px 60px #b6b6b6;
+    transform: scale(1.1);
+    border-radius: 10px;
   }
 section.login-page .login-form .login-header {
       margin-bottom: 1.2em;
@@ -623,12 +625,12 @@ section.login-page .login-form input {
       margin-bottom: 0.8em;
       margin-top: 0.5em;
       padding: 1.2em 1em;
-      font-size: 1.1em;
+      font-size: 1.2em;
       border-radius: 1px; }
 section.login-page .login-button .btn {
     padding: 0.5em 2em;
-    font-size: 1.1em;
-    border-radius: 1px;
+    font-size: 1.2em;
+    border-radius: 10px;
     margin-bottom: 0; }
 section.login-page .login-footer {
     padding-top: 8px;

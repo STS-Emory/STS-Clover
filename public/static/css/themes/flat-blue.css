@@ -346,16 +346,22 @@
   }
   .flat-blue .modal.modal-success .modal-header {
     background-color: #1ABC9C;
-    color: #FFF; }
+    color: #FFF; 
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;}
   .flat-blue .modal.modal-info .modal-header {
     background-color: #22A7F0;
     color: #FFF; }
   .flat-blue .modal.modal-warning .modal-header {
     background-color: #FABE28;
-    color: #FFF; }
+    color: #FFF;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px; }
   .flat-blue .modal.modal-danger .modal-header {
     background-color: #FA2A00;
-    color: #FFF; }
+    color: #FFF; 
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;}
   .flat-blue .alert.alert-success {
     background-color: #99e9d9;
     color: #006551;
@@ -386,7 +392,9 @@
   .flat-blue .alert.alert-danger {
     background-color: #ffb8aa;
     border-color: #fb927d;
-    color: #7c1a06; }
+    color: #7c1a06;
+    border-radius: 5px;
+   }
     .flat-blue .alert.alert-danger .alert-link {
       color: #7c1a06;
       text-decoration: underline; }
