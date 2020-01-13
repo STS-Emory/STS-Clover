@@ -24,7 +24,7 @@
     "angular": "^1.7.8",
     "async": "~1.5.2",
     "body-parser": "^1.19.0",
-    "bower": "~1.7.7",
+    "bower": "~1.8.8",
     "cfenv": "^1.2.2",
     "chalk": "~1.1.1",
     "compression": "^1.7.4",
