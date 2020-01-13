@@ -58,7 +58,7 @@ var
   },
   UnclosedWalkinEmailNotification = function() {
     var technician = [], queue = [];
-    return schedule.scheduleJob('0 30 19 * * *', function() {
+    return schedule.scheduleJob('0 0 19 * * 1-5', function() {
       Walkin.find({ status : { $in : ['In queue', 'Work in progress'] }, isActive : true }).select('status lastUpdateTechnician').exec(function (err, walkins) {
         if(err) return console.log(err);
         

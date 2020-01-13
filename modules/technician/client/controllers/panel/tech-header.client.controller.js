@@ -39,8 +39,9 @@ angular.module('technician').controller('TechHeaderController', ['$scope', '$sta
           $interval.cancel($scope.autoNotificationCountRetriever);
         })
         .success(function(counts) {
-          if (!hasNotifications && (counts.announcements || counts.chores || counts.checkins))
+          if (!hasNotifications && (counts.announcements || counts.chores || counts.checkins)){
             alert('You have new incoming announcements or tasks.');
+            console.log(counts);}
           $scope.notificationCounts = counts;
         });
     };
