@@ -80,13 +80,13 @@ exports.validateUsername = function(username, callback){
       validateWithUserEntryDatabase,
       manualValidation
     ],
-  function(err, username, result){
-    if(err){
-      console.error(err);
-      callback(null);
-    }
-    callback(result);
-  });
+    function(err, username, result){
+      if(err){
+        console.error(err);
+        callback(null);
+      }
+      callback(result);
+    });
 };
 
 exports.validate = function(req, res){

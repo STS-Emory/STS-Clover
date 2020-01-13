@@ -11,7 +11,7 @@ var fs = require('fs'),
 mongoose.Promise = global.Promise;
 
 // Get credentials (& reformat wsdl url)
-var credentialFilePath = __dirname + '/../../../../config/credentials/ServiceNow.json',
+var credentialFilePath = __dirname + '/../../../../config/credentials/ServiceNow_Test.json',
   credentialFile = fs.readFileSync(credentialFilePath, 'utf8'),
   credential = JSON.parse(credentialFile);
 
@@ -294,7 +294,7 @@ exports.syncIncident = function(action, type, ticket, next){
 
     client.insert(data, function(err, response){
       if(err) return console.error('Insert Request Error: ' + err);
-
+      console.log(response);
       if(response.sys_id && response.display_value){
         switch(response.status){
           case 'inserted':
@@ -319,6 +319,7 @@ exports.syncIncident = function(action, type, ticket, next){
             });
             break;
           default:
+            console.error('Crating client');
             console.error('Invalid Status Error:');
             return console.error(response);
         }
@@ -360,6 +361,7 @@ exports.forwardIncident = function(action, type, ticket, next){
             break;
           
           default:
+            console.error('Forwarding');
             console.error('Invalid Status Error:');
             return console.error(response);
         }
@@ -412,7 +414,9 @@ exports.syncTicketAux = function(client, id, action, type, tickets){
               });
               break;
             default:
+              console.error('Ticket aux');
               console.error('Invalid Status Error:'); console.error(response);
+              
           }
         }
         else{ console.error('Field(s) Missing Error:'); console.error(response); }

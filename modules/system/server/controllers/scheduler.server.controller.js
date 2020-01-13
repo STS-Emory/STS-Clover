@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
   Checkin = mongoose.model('Checkin'),
   mailer = require('./mailer.server.controller.js'),
   sn = require('./service-now.server.controller.js'),
-  system = require('./system.server.controller.js');
+  System = mongoose.model('SystemSetting');
 
 mongoose.Promise = global.Promise;
 
@@ -18,7 +18,7 @@ var popOpt = [
 
 var
   WalkinSurveyBroadcast = function() {
-    return schedule.scheduleJob('0 0 9-19 * * 1-5', function(){
+    return schedule.scheduleJob('0 1 9-19 * * 1-5', function(){
       var i, user, start = new Date(Date.now()-60*60*1000), end = new Date(Date.now());
 
       Walkin.find({ status : 'Completed', isActive : true, resolutionTime : { $gte: start, $lt : end },
@@ -57,15 +57,35 @@ var
     });
   },
   UnclosedWalkinEmailNotification = function() {
-    return schedule.scheduleJob('0 30 18 * * 1-5', function() {
-      Walkin.find({ status : { $in : ['In queue', 'Work in progress'] }, isActive : true })
-        .count(function (err, count) {
-          if(err) return console.error(err);
-
-          if(count)
-            mailer.send(system.setting.admin_email, 'Clover: Unclosed Walk-in Tickets', '',
-              'Important: There are ' + count + ' walk-in ticket(s) remains in the queue. Please take action to close them.');
+    var technician = [], queue = [];
+    return schedule.scheduleJob('0 30 19 * * *', function() {
+      Walkin.find({ status : { $in : ['In queue', 'Work in progress'] }, isActive : true }).select('status lastUpdateTechnician').exec(function (err, walkins) {
+        if(err) return console.log(err);
+        
+        for(var k=0; k<walkins.length; k++){
+          if(walkins[k].status === 'Work in progress')
+            technician.push(walkins[k].lastUpdateTechnician);
+          else 
+            queue.push(walkins[k].lastUpdateTechnician);
+        }
+        //send email to technicians
+        if(technician){
+          User.findById({ $in:technician }).select('username').exec(function(err,user){
+            if (err) return console.log(err);
+            mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
+              'Important: You have a walk-in ticket(s) that needs to be closed. Please check clover.');
+          });
+        }
+        //send email to admins
+        System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
+          if(err) return console.log(err);
+          for (var i=0; i<admins.length; i++){
+            mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
+              'Important: There are ' + technician.length+ ' Open walk-in ticket(s) and '+queue.length+' unopened ticket(s) in the Queue. Please take action to close them.');
+          }
         });
+      });
+        
     });
   };
 
@@ -75,7 +95,7 @@ exports.TASKS = {
   'Hourly Walk-in Survey Broadcast' : WalkinSurveyBroadcast,
   'Hourly Check-in Survey Broadcast' : CheckinSurveyBroadcast,
   'ServiceNow Batch Sync @ 7:00pm' : ServiceNowBatchSync,
-  'Unclosed Walk-in Ticket check @ 6:30pm' : UnclosedWalkinEmailNotification
+  'Unclosed Walk-in Ticket check @ 7:00pm' : UnclosedWalkinEmailNotification
 };
 
 exports.init = function(setting, callback){
@@ -98,4 +118,3 @@ exports.init = function(setting, callback){
 
   callback();
 };
-

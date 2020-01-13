@@ -1,5 +1,5 @@
 <section ng-controller="TaskCenterController" ng-init="init()">
-  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
     <div class="card card-warning">
       <div class="card-header">
         <div class="card-title">
@@ -11,8 +11,8 @@
         <div class="pull-right title" style="font-size: 16px; margin: 15px -15px 0 0; padding: 0;">
           <div class="form-group">
             <i class="col-lg-2 col-md-2 col-sm-2 fa fa fa-search" style="margin-top: 5px;"></i>
-            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" style="">
-              <input type="text" class="form-control" style="height: 28px; width: 80px" placeholder="  NetID" ng-model="sitask_netid">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+              <input type="text" class="form-control" style="height: 30px; width: 100px; padding-left:5px; padding-bottom: 2px" placeholder="NetID..." ng-model="sitask_netid">
             </div>
           </div>
         </div>
@@ -23,26 +23,42 @@
         </div>
         <table class="table table-hover" style="margin-bottom: 0; " ng-show="sitasks && sitasks.length">
           <thead><tr>
+            <th><input type="checkbox" ng-show= "isAdmin" ng-model="checkAll" ng-click="selectAll()"/></th>
             <th style="width: 90px; text-align: center;">NetID</th>
             <th style="text-align: left; padding-left: 0;">Task Description</th>
-            <td style="width: 80px"></td>
+            <th style="text-align: right; padding: 0 15px;" ng-show="selectedTask.length>1">
+
+              <button class="btn btn-xs btn-danger"  ng-click="deleteMany(selectedTask)" tooltip-append-to-body="true">Delete</button>
+            </th>
           </tr></thead>
           <tbody>
 
-          <tr ng-repeat="sitask in sitasks">
-            <td style="text-align: center; line-height: 38px; padding: 0;">{{ sitask.username }}</td>
+          <tr ng-repeat="sitask in sitasks | filter:sitask_netid">
+            <td style="width: 20px; text-align: center;"><input  type="checkbox" ng-show= "isAdmin" ng-model="selectedTask" ng-checked="exist(sitask)" ng-click="checkSITask(sitask)"/></td>
+            <td style="text-align: center; line-height: 38px; padding: 0;">
+<!--              <span style="font-size: 14px; color: red;" tooltip-append-to-body="true" tooltip-placement="top" uib-tooltip="Invalid Phone"><i class="fa fa-exclamation-triangle" ></i></span>-->
+              {{ sitask.username }}</td>
             <td style="padding: 0; line-height: 38px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0;">
               {{ sitask.description }}
             </td>
-            <td style="text-align: right; width: 200px;">
-              <button class="btn btn-xs btn-warning" ng-show="isAdmin" style="margin: 0" ng-click="editSITask(sitask);">Edit</button>
-              <button class="btn btn-xs btn-primary" style="margin: 0" ng-click="viewSITask(sitask);">View</button>
-              <button ng-show="!sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="createSITaskChore($index, sitask)"
-                      tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Create Chore">
-                <i class="fa fa-tasks"></i></button>
-              <button ng-show="sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="viewWalkin(sitask.walkin)"
-                      tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="View Walk-in">
-                <i class="fa fa-info-circle"></i></button>
+            <td style="text-align: right; width: 150px; padding:5px 15px;" >
+                <div ng-if="hideButtons">
+                  <button class="btn btn-xs btn-success" ng-show="isAdmin" style="margin: 0" ng-click="editSITask(sitask);" uib-tooltip="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+
+                  <button class="btn btn-xs btn-primary" style="margin: 0"  ng-click="viewSITask(sitask);" uib-tooltip="View"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+
+                  <button  class="btn btn-xs btn-default" style="margin: 0" ng-show="!sitask.walkin " ng-click="createSITaskChore($index, sitask)"
+                           tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Create Chore">
+                    <i class="fa fa-tasks"></i></button>
+
+                  <button class="btn btn-xs btn-danger" ng-show= "isAdmin " ng-click="delete(sitask)" tooltip-append-to-body="true"  uib-tooltip="Delete">
+                    <i class="fa fa-trash" aria-hidden="true"></i></button>
+
+                  <button ng-show="sitask.walkin" class="btn btn-xs btn-default" style="margin: 0" ng-click="viewWalkin(sitask.walkin)"
+                          tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="View Walk-in">
+                    <i class="fa fa-info-circle"></i></button>
+                </div>
+
             </td>
           </tr>
           </tbody>
@@ -52,24 +68,25 @@
     </div>
   </div>
 
-  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12" style="margin-bottom: 2em;">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="margin-bottom: 1em;">
     <div class="card">
       <div class="card-header">
         <div class="card-title">
-          <div class="title">
-            <i class="fa fa-tasks"></i>&nbsp;&nbsp;Chores
+          <div class="title" style="color: black;">
+            <i class="fa fa-tasks"></i>
+            &nbsp;&nbsp;Chores
           </div>
         </div>
 
         <div class="pull-right" style="margin-top: 3px; text-align: right; width: 600px;">
-          <span class="col-lg-7 col-md-7 col-sm-7" style="padding: 0 10px 0 0;">
+          <span class="col-lg-6 float-left-col-md-12 col-sm-12" style="padding: 0 5px 0 0;">
             <div class="btn btn-sm btn-info" ng-click="listChores_yesterday()">Yesterday</div>
             <div class="btn btn-sm btn-success" ng-click="listChores_today()">Today</div>
             <div class="btn btn-sm btn-danger" ng-click="listChores_incomplete()">Incomplete</div>
           </span>
-          <span class="col-lg-5 col-md-5 col-sm-5" style="padding: 3px 10px 0 0;">
-            <input type="date" class="form-control col-lg-9 col-md-9 col-sm-9" style="width: 160px;" ng-model="chore_date">
-            <button class="btn btn-sm btn-default col-lg-3 col-md-3 col-sm-3" style="margin: 2px 0 0 10px;" ng-click="listChores_dateQuery(chore_date)">Search</button>
+          <span class="col-lg-6 col-md-12 col-sm-12" style="padding: 3px 5px 0 0;">
+            <input type="date" class="form-control col-lg-8 float-left-col-md-6 col-sm-6" style="width: 160px; margin: auto" ng-model="chore_date">
+            <button class="btn btn-sm btn-default col-lg-4 float-right-col-md-6 col-sm-6" style="margin: 2px 0 0 5px;" ng-click="listChores_dateQuery(chore_date)">Search</button>
           </span>
         </div>
       </div>

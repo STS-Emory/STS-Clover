@@ -13,7 +13,7 @@ var validateEmailFormat = function(email){
 var SystemSettingSchema = new Schema({
   admin_email: {
     type: String,
-    default: 'michael.buchmann@emory.edu',
+    default: 'tuyishkevin@gmail.com',
     validate: [validateEmailFormat, 'Please enter a correct email address!']
   },
   checkin_templates: {
