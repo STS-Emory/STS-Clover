@@ -141,11 +141,11 @@ exports.deleteMany =function (req, res) {
       entries.push(item._id);
     });
   }
-  SITask.deleteMany({ _id: { $in:entries} }).then( function (err) {
+  SITask.deleteMany({ _id: { $in:entries } }).then(function (err){
     if(err) console.log(err);
     else{
       res.select(200);
-      console.log(req.body.length + "Sitask Deleted");
+      console.log(req.body.length + 'Sitask Deleted');
     }
   });
 };
