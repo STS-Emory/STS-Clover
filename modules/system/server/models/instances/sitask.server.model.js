@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  autoIncrement = require('mongoose-plugin-autoinc'),
+  autoIncrement = require('mongoose-auto-increment'),
   Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -12,15 +12,13 @@ var SITaskSchema = new Schema({
   description: { type: String, default: '', trim: true },
   walkin: { type: Number, ref: 'Walkin' },
 
-  /*
-   Notification/Display informationres
-  */
+// Notification/Display information
   msg_NotifyCustomer: { type: String, default: '', trim: true },
   msg_DisplayCustomer: { type: String, default: '', trim: true },
 
   msg_DisplayTechnician: { type: String, default: '', trim: true },
 
-  //  Tracking information
+//  Tracking information
   createdBy: {
     type: Schema.ObjectId, ref: 'User', required: true
   },

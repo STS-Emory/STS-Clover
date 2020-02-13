@@ -2,7 +2,7 @@
 
 angular.module('technician').controller('WalkinListController', ['$scope', '$http', 'ModalLauncher', '$timeout',
   function ($scope, $http, ModalLauncher, $timeout) {
-    $scope.query = { field: 'netid' };
+    $scope.query = { field: 'id' };
 
     /*----- Action functions -----*/
     $scope.viewWalkin = function(id){
@@ -27,7 +27,6 @@ angular.module('technician').controller('WalkinListController', ['$scope', '$htt
       var now = new Date(Date.now());
       if($scope.dateQuery && !query.endTime)
         $scope.query.endTime = now;
-    
 
       switch (query.field) {
         case 'id':
@@ -86,8 +85,5 @@ angular.module('technician').controller('WalkinListController', ['$scope', '$htt
         else $scope.textQuery = true;
       }, 250);
     });
-
-    // $scope.$watch('')      
-
   }
 ]);
