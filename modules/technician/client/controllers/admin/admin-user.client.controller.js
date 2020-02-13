@@ -38,7 +38,7 @@ angular.module('technician.admin').controller('AdminUserController', ['$scope', 
           .error(function(response){
             $scope.resetMsg.error = response.message;
           }
-        );
+          );
       }
       else
         $scope.resetMsg.error = 'Missing username.';
@@ -54,7 +54,7 @@ angular.module('technician.admin').controller('AdminUserController', ['$scope', 
           .error(function(response){
             $scope.removeTechMsg.error = response.message;
           }
-        );
+          );
       }
       else $scope.removeTechMsg.error = 'Missing username.';
     };
@@ -69,7 +69,7 @@ angular.module('technician.admin').controller('AdminUserController', ['$scope', 
           .error(function(response){
             $scope.removeAdminMsg.error = response.message;
           }
-        );
+          );
       }
       else $scope.removeAdminMsg.error = 'Missing username.';
     };

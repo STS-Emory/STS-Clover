@@ -2,7 +2,7 @@
 
 angular.module('technician').controller('CheckinListController', ['$scope', '$http', 'ModalLauncher', '$timeout',
   function ($scope, $http, ModalLauncher, $timeout) {
-    $scope.query = { field: 'id' };
+    $scope.query = { field: 'netid' };
 
     /*----- Action functions -----*/
     $scope.viewCheckin = function(id){

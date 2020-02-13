@@ -4,14 +4,16 @@
       <div class="form-group">
         <label for="select" style="font-size: 15px;">Search for Walk-ins:&emsp;</label>
         <select id="select" style="width: 120px;" ng-model="query.field">
-          <option value="id">ID</option>
           <option value="netid">NetID</option>
           <option value="name">Name</option>
+          <option value="id">ID</option>
+          <option value="servicenow">ServiceNow ID</option>
           <option value="created">Created at</option>
           <option value="resolved">Resolved at</option>
-          <option value="servicenow">ServiceNow ID</option>
+          
         </select>
-        <input type="text" class="form-control" placeholder="Input search query"  style="height: 28px; width: 480px;" ng-show="textQuery" ng-model="query.value">
+        <input type="text" class="form-control" placeholder="search walkin"  style="height: 28px; width: 480px;" ng-show="textQuery" ng-model="query.value">
+        
         <span ng-show="dateQuery">
             <input type="datetime-local" class="form-control" placeholder="Start time mm/dd/yyyy" style="height: 28px; width: 240px;" ng-model="query.startTime">
             &nbsp;-&nbsp;

@@ -2,9 +2,11 @@
 
 <footer class="app-footer" style="position: absolute; bottom: 15px; padding: 0 3vw; width: 100vw;">
   <div class="wrapper">
-    <span class="pull-right">v2.2 <a href="https://github.com/STS-Emory/STS-Clover"><i class="fa fa-code-fork"></i></a></span>
-    Copyright &copy; 2015-2019 by Emory Student Tech Support.
+    <span class="pull-right">v2.3 <a href="https://github.com/STS-Emory/STS-Clover"><i class="fa fa-code-fork"></i></a></span>
+    Copyright &copy; 2015-<span id="currentYear"></span> Emory Student Tech Support.
   </div>
+</footer>
+<script>document.getElementById('currentYear').appendChild(document.createTextNode(new Date().getFullYear()))</script>
 </footer>
 
 
