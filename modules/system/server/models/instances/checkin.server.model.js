@@ -1,13 +1,13 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  autoIncrement = require('mongoose-plugin-autoinc'),
+  autoIncrement = require('mongoose-auto-increment'),
   Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
 
 // Plugin initialization
-//autoIncrement.initialize(mongoose.connection);
+autoIncrement.initialize(mongoose.connection);
 
 var CheckinSchema = new Schema({
   //Basic instance information
@@ -164,5 +164,5 @@ CheckinSchema.pre('save', function(next) {
   next();
 });
 
-CheckinSchema.plugin(autoIncrement.plugin,{ model:'Checkin', startAt:40000 });
+CheckinSchema.plugin(autoIncrement.plugin, 'Checkin');
 mongoose.model('Checkin', CheckinSchema);

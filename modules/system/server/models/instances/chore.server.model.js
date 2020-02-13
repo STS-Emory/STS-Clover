@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  autoIncrement = require('mongoose-plugin-autoinc'),
+  autoIncrement = require('mongoose-auto-increment'),
   Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;

@@ -7,10 +7,10 @@ angular.module('system').controller('SITaskCreateModalController', ['$scope', '$
 
     $scope.init = function() {
       $http.get('/api/tech/sitask/settings')
-        .error(function () { $scope.error = 'Server error while creating chore'; })
-        .success(function(settings){
-          $scope.settings = settings;
-        });
+      .error(function () { $scope.error = 'Server error while creating chore'; })
+      .success(function(settings){
+        $scope.settings = settings;
+      });
     };
     
     // Modal functions

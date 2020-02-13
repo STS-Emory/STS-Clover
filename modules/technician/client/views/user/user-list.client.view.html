@@ -25,32 +25,28 @@
       <hr/></div>
   </div>
 
-  <div class="col-lg-11 col-md-11 col-sm-12 col-xs-12 card"  ng-show="users && users.length > 0"
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 card" ng-show="users && users.length > 0"
        style="margin-top: 15px; overflow: auto; max-height: 75vh;">
     <table class="table table-hover" style="margin-top: 10px;">
       <thead><tr>
-        <th ng-show = "isAdmin">Action</th>
+        <th>Action</th>
         <th>NetID</th>
         <th>Customer</th>
         <th>Location</th>
         <th>Phone</th>
         <th>Roles</th>
-        <th style="width: 100px;">Verified</th>
-        <th style="width: 100px;">isActive</th>
+        <th>Verified</th>
+        <th>isActive</th>
       </tr></thead>
       <tbody><tr ng-repeat="user in users">
-        <td style="width:150px; text-align:left;"ng-show="isAdmin" >
-          <span >
-            <button class="btn btn-xs btn-info" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Create task" ng-click="createTask(user)"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
-
-            <button class="btn btn-xs btn-success" ng-show="!user.verified" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Verify" ng-click="verify(user)"><i  class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
-
-            <button class="btn btn-xs btn-primary" ng-show="isAdmin&&!user.isActive" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Active" ng-click="setActive(user)"><i  class="fa fa-user-plus" aria-hidden="true"></i></button>
-
-            <button class="btn btn-xs btn-warning" ng-show="isAdmin&&user.isActive" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Inactive" ng-click="setInactive(user)"><i class="fa fa-user-times" aria-hidden="true" ></i></button>
-      
-            <button class="btn btn-xs btn-danger" ng-show="isAdmin&&user.roles.indexOf('technician')>=0" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Remove Technician" ng-click="removeTechnician(user)"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
-            
+        <td style="width:65px; text-align: center;">
+          <span class="fa fa-angle-double-right" ng-show="!showActions[$index]" ng-mouseover="showActions[$index]=true"></span>
+          <span ng-show="showActions[$index]" ng-mouseleave="showActions[$index]=false">
+            <span class="fa fa-plus-circle" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Create task" ng-click="createTask(user)"></span>
+            <span ng-show="!user.verified" class="fa fa-thumbs-o-up" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Verify" ng-click="verify(user)"></span>
+            <span ng-show="isAdmin&&!user.isActive" class="fa fa-user-plus" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Active" ng-click="setActive(user)"></span>
+            <span ng-show="isAdmin&&user.isActive" class="fa fa-user-times" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Set Inactive" ng-click="setInactive(user)"></span>
+            <span ng-show="isAdmin&&user.roles.indexOf('technician')>=0" class="fa fa-eye-slash" tooltip-placement="top" tooltip-append-to-body="true" uib-tooltip="Remove Technician" ng-click="removeTechnician(user)"></span>
           </span>
         </td>
         <td>{{user.username}}</td>

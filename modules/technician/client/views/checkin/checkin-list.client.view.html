@@ -4,13 +4,13 @@
       <div class="form-group">
         <label for="select" style="font-size: 15px;">Search for Check-ins:&emsp;</label>
         <select id="select" style="width: 120px;" ng-model="query.field">
+          <option value="id">ID</option>
           <option value="netid">NetID</option>
           <option value="name">Name</option>
-          <option value="id">ID</option>
-          <option value="servicenow">ServiceNow ID</option>
           <option value="created">Created at</option>
           <option value="completed">Completed at</option>
           <option value="checkout">Checkout at</option>
+          <option value="servicenow">ServiceNow ID</option>
         </select>
         <input type="text" class="form-control" placeholder="Input search query"  style="height: 28px; width: 480px;" ng-show="textQuery" ng-model="query.value">
         <span ng-show="dateQuery">
