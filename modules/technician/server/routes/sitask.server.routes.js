@@ -18,4 +18,6 @@ module.exports = function (app) {
   app.route('/api/tech/sitask/query').post(users.hasTechnicianPermission, sitask.query);
 
   app.param('sitaskId', sitask.sitaskById);
+  app.route('/delete').post(users.hasAdminPermission, sitask.deleteSITask);
+  app.route('/deleteMult').post(users.hasAdminPermission, sitask.deleteMany);
 };

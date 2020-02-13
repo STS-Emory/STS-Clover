@@ -127,5 +127,80 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
           ModalLauncher.launchWalkinViewModal(walkin);
         });
     };
+    $scope.selectedTask = [];
+    $scope.checkAll = false;
+
+    $scope.exist =function(sitask){return $scope.selectedTask.indexOf(sitask)> -1;};
+    $scope.checkSITask = function(sitask){
+      var idx = $scope.selectedTask.indexOf(sitask);
+      if(idx> -1) $scope.selectedTask.splice(idx,1);
+      else $scope.selectedTask.push(sitask);
+
+    };
+
+    $scope.selectAll = function() {
+      if (!$scope.checkAll) {
+        $scope.selectedTask = [];
+        //set all row selected
+      } else {
+        angular.forEach($scope.sitasks, function(sitask) {
+          var idx = $scope.selectedTask.indexOf(sitask);
+          if (idx >= 0) return true;
+          else $scope.selectedTask.push(sitask);
+        });
+      }
+    };
+
+    $scope.hideButtons = true;
+    $scope.$watch('selectedTask.length', function (size){
+      if(size>1) $scope.hideButtons = false;
+      else $scope.hideButtons =true;
+    });
+
+    $scope.delete = function(sitask){
+      var modal = ModalLauncher.launchDefaultWarningModal(
+        'Confirm: Delete',
+        'Are you sure you want to delete this task?'
+      );
+      modal.result.then(function (response) {
+        if(response){
+          $http.post('/delete',sitask)
+            .success(function(){
+              for(var idx in $scope.sitasks){
+                if($scope.sitasks[idx]._id === sitask._id){
+                  $scope.sitasks.splice(idx, 1);
+                  $scope.sitask = undefined;
+                  break;
+                }
+              }
+            })
+            .error(function(){alert('Failed request. Check console for the error.');});
+        }
+      });
+    };
+
+    $scope.deleteMult= function () {
+      var modal = ModalLauncher.launchDefaultWarningModal(
+        'Confirm: Delete',
+        'Are you sure you want to delete '+$scope.selectedTask.length+' task?');
+      modal.result.then(function (response) {
+        if(response){
+          
+          $http.post('/deleteMult', $scope.selectedTask)
+            .success(
+              function(){
+                var SITasks = $scope.selectedTask;
+                for(var idx in SITasks){
+                  var tID = $scope.sitasks.indexOf(SITasks[idx]);
+                  if(tID != -1 && $scope.sitasks[tID]._id === SITasks[idx]._id){
+                    $scope.sitasks.splice(tID, 1);
+      
+                  }
+                }
+              }) 
+            .error(function(){alert('Failed request. Check console for the error.');});
+        }
+      });
+    };
   }
 ]);

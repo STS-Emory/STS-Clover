@@ -2,7 +2,41 @@
   <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
     <span class="fa fa-close" aria-hidden="true" style="margin: 8px 8px 0 0"></span>
   </button>
-  <h3 class="modal-title"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Create Self-Initiated Task&nbsp;&nbsp;<span style="font-size: 16px">(NetID: {{data.user.username}})</span></h3>
+  <div style="display: inline-block;">
+        <h3 class="modal-title"><i class="fa fa-cogs"></i> Create Self-Initiated Task: </h3>
+  </div>
+  <div style="display: inline-block; max-height: 40px; width: 50%; overflow:scroll; vertical-align: bottom;">
+        <span style="font-size: 18px; " ng-show="allUsers.length==0">{{data.user.username}}</span>
+        <span style="font-size: 18px;"> {{allUsers.join(',')}}</span>
+      
+  </div>
+      
+  <div class="row" style="margin-bottom:0;">
+    <div class="col col-lg-2 col-md-2 col-xs-12" style="margin-bottom:0;">
+        <button type="file" class="btn btn-primary btn-xs"  ngf-select data-ng-model="file" accept=".txt, .csv" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip="Upload(.txt, .csv)" ng-hide="!error && summary.count > 0 && summary.count != summary.importCount"><i class="fa fa-cloud-upload" aria-hidden="true" 
+          ></i>Upload Users</button>
+        <button type="button" class="btn btn-xs btn-success" ng-click="import()"
+        ng-show="!error && summary.count > 0 && summary.count != summary.importCount">Import All</button>
+    </div>
+    
+  
+  <div class="pull-left col col-lg-4 col-md-4 col-xs-4" style="margin:0; font-size: 10px;">
+      <uib-progressbar type="success" class="text-center" animate="true" style="border-radius: 20px; margin:10px 0 0 0;" ng-show="importing && !summary.error"
+      max="summary.count" value="summary.importCount"><span style="color:white; white-space:nowrap;">
+      {{summary.importCount}} / {{summary.count}}</span></uib-progressbar>
+
+      <div  style="font-size: 12px;"ng-show="loading">
+        <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
+        <span style="font-weight: bold;">Loading...</span>
+      </div>
+
+      <div  style="font-size: 12px;color: green;" ng-show="success" >
+        <i class="fa fa-check-circle fa-2x"></i>
+        <span style="font-weight: bold;">{{success}}</span>
+      </div>
+  </div>
+</div>
+  
 </div>
 
 <div class="modal-body" style="padding-bottom: 0; overflow: auto;" ng-init="init()">
@@ -55,6 +89,8 @@
 <div class="modal-footer" style="padding: 10px 10px 0 0; margin: 0 0 10px 0; border-top: 0px;">
   <span style="color: red;" ng-show="error"><i class="fa fa-times-circle"></i> {{error}}&emsp;</span>
   <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>&nbsp;
-  <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="create()"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create</button>
+  <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="create()" ng-hide="importedUsers.length"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create</button>
+  <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="createTasks()" ng-show="importedUsers.length>1"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create Tasks</button>
+  
 </div>
 
