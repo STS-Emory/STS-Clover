@@ -156,7 +156,6 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
     $scope.$watch('selectedTask.length', function (size){
       if(size>1) $scope.hideButtons = false;
       else $scope.hideButtons =true;
-      console.log($scope.selectedTask);
     });
 
     $scope.delete = function(sitask){
@@ -166,21 +165,40 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
       );
       modal.result.then(function (response) {
         if(response){
-          $http.post('/delete', sitask)
-            .success(window.location.reload())
+          $http.post('/delete',sitask)
+            .success(function(){
+              for(var idx in $scope.sitasks){
+                if($scope.sitasks[idx]._id === sitask._id){
+                  $scope.sitasks.splice(idx, 1);
+                  $scope.sitask = undefined;
+                  break;
+                }
+              }
+            })
             .error(function(){alert('Failed request. Check console for the error.');});
         }
       });
     };
 
-    $scope.deleteMany= function () {
+    $scope.deleteMult= function () {
       var modal = ModalLauncher.launchDefaultWarningModal(
         'Confirm: Delete',
         'Are you sure you want to delete '+$scope.selectedTask.length+' task?');
       modal.result.then(function (response) {
         if(response){
-          $http.post('/deleteMany', $scope.selectedTask)
-            .success(window.location.reload())
+          
+          $http.post('/deleteMult', $scope.selectedTask)
+            .success(
+              function(){
+                var SITasks = $scope.selectedTask;
+                for(var idx in SITasks){
+                  var tID = $scope.sitasks.indexOf(SITasks[idx]);
+                  if(tID != -1 && $scope.sitasks[tID]._id === SITasks[idx]._id){
+                    $scope.sitasks.splice(tID, 1);
+      
+                  }
+                }
+              }) 
             .error(function(){alert('Failed request. Check console for the error.');});
         }
       });

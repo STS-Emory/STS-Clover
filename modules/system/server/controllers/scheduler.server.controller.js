@@ -57,36 +57,39 @@ var
     });
   },
   UnclosedWalkinEmailNotification = function() {
-    var technician = [], queue = [];
-    return schedule.scheduleJob('0 30 19 * * *', function() {
+    var technician = [], queue = 0;
+    return schedule.scheduleJob('0 30 18 * * 1-5', function() {
       Walkin.find({ status : { $in : ['In queue', 'Work in progress'] }, isActive : true }).select('status lastUpdateTechnician').exec(function (err, walkins) {
         if(err) return console.log(err);
-        
-        for(var k=0; k<walkins.length; k++){
-          if(walkins[k].status === 'Work in progress')
-            technician.push(walkins[k].lastUpdateTechnician);
-          else 
-            queue.push(walkins[k].lastUpdateTechnician);
-        }
-        //send email to technicians
-        if(technician){
-          User.findById({ $in:technician }).select('username').exec(function(err,user){
-            if (err) return console.log(err);
-            mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
-              'Important: You have a walk-in ticket(s) that needs to be closed. Please check clover.');
-          });
-        }
-        //send email to admins
-        System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
-          if(err) return console.log(err);
-          for (var i=0; i<admins.length; i++){
-            mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
-              'Important: There are ' + technician.length+ ' Open walk-in ticket(s) and '+queue.length+' unopened ticket(s) in the Queue. Please take action to close them.');
+        else if (walkins){
+          for(var k in walkins){
+            if(walkins[k].status === 'Work in progress')technician.push(walkins[k].lastUpdateTechnician);
+            else if(walkins[k].status == 'In queue') queue++;
           }
-        });
+          // send email to technicians
+          if(technician.length!==0){
+            User.findById({ $in:technician }).select('username').exec(function(err,user){
+              if (err) return console.log(err);
+              else mailer.send(user.username+'@emory.edu', 'Clover: Unclosed Walk-in Tickets', '',
+                'Important: You have a walk-in ticket(s) that needs to be closed. Please tak actions to close them.');
+            });
+            console.log('**** sent emial(s) to technician(s)');
+          }
+
+          // send email to admins
+          if(technician.length!==0 || queue)
+            System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
+              if(err) return console.log(err);
+              else {for (var i=0; i<admins.length; i++){
+                mailer.send(admins[i].admin_email, 'Clover: Unclosed Walk-in Tickets', '',
+                  'Important: There are ' + technician.length+' Open walk-in ticket(s) and '+queue+' unopened ticket(s) in the Queue. Please take action to close them.');
+              }
+              }
+            });
+          console.log('**** sent emial to Admin ****');
+        }
       });
-        
-    });
+    });  
   };
 
 // Module variables
@@ -95,7 +98,7 @@ exports.TASKS = {
   'Hourly Walk-in Survey Broadcast' : WalkinSurveyBroadcast,
   'Hourly Check-in Survey Broadcast' : CheckinSurveyBroadcast,
   'ServiceNow Batch Sync @ 7:00pm' : ServiceNowBatchSync,
-  'Unclosed Walk-in Ticket check @ 7:00pm' : UnclosedWalkinEmailNotification
+  'Unclosed Walk-in Ticket check @ 6:30pm' : UnclosedWalkinEmailNotification
 };
 
 exports.init = function(setting, callback){

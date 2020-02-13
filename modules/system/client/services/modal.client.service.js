@@ -106,16 +106,6 @@ angular.module('system').service('ModalLauncher', ['$uibModal',
       });
     };
 
-    this.launchSITaskDeleteModal = function(sitask) {
-      $uibModal.open({
-        animation: true, size: 'md', backdrop: 'static',
-        controller: 'SITaskDeleteModalController',
-        windowClass: 'fade modal-warning panel-center-modal',
-        templateUrl: 'modules/technician/client/views/tasks/sitask-delete-modal.client.view.html',
-        resolve: { data: function(){ return { sitask : sitask }; } }
-      });
-    };
-
     this.launchSITaskViewModal = function(sitask) {
       $uibModal.open({
         animation: true, size: 'lg', backdrop: 'static',

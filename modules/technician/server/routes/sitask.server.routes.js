@@ -19,5 +19,5 @@ module.exports = function (app) {
 
   app.param('sitaskId', sitask.sitaskById);
   app.route('/delete').post(users.hasAdminPermission, sitask.deleteSITask);
-  app.route('/deleteMany').post(users.hasAdminPermission, sitask.deleteMany);
+  app.route('/deleteMult').post(users.hasAdminPermission, sitask.deleteMany);
 };
