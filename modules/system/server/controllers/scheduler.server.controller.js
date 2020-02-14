@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
   Checkin = mongoose.model('Checkin'),
   mailer = require('./mailer.server.controller.js'),
   sn = require('./service-now.server.controller.js'),
-  system = require('./system.server.controller.js');
+  System = mongoose.model('SystemSetting');
 
 mongoose.Promise = global.Promise;
 
