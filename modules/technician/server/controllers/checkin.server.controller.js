@@ -212,7 +212,7 @@ exports.checkout = function(req, res) {
       if(!checkin.user.isWildcard)
         mailer.sendServiceLog(checkin.user.username+'@emory.edu',
           checkin._id, checkin.itemReceived, checkin.serviceLog, checkin.user.displayName,
-        function(){ checkin.logEmailSent = true; checkin.save(); });
+          function(){ checkin.logEmailSent = true; checkin.save(); });
 
       // Sync with SN
       sn.syncIncident(sn.CREATE, sn.CHECKIN, checkin);
@@ -341,7 +341,7 @@ exports.incomplete = function(req, res) {
 exports.month = function(req, res) {
   var currentMonth = new Date(Date.now()); currentMonth.setDate(1); currentMonth.setHours(0);
   Checkin.find({ isActive : true, $or : [ { completionTime : { $gte : currentMonth } }, { created : { $gte : currentMonth } }] })
-      .select('_id user deviceManufacturer deviceModel status created completionTime checkoutTime')
+    .select('_id user deviceManufacturer deviceModel status created completionTime checkoutTime')
     .populate([{ path : 'user', model : 'User', select : 'displayName username' }])
     .sort('created').exec(function(err, checkins) {
       if(err) {

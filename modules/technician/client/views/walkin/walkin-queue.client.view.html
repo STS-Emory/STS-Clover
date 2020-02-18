@@ -56,7 +56,7 @@
     <div class="alert alert-warning alert-dismissible fade in" role="alert" ng-show="selected && selected.unverified && (selected.status === 'In queue' || selected.status == 'Duplicate')">
       <div class="pull-right" style="margin: 0 -15px 0 0;">
         <button type="button" class="btn btn-sm btn-primary" ng-click="selected.unverified=false;">Proceed</button>
-        <button class="btn btn-sm btn-default" ng-click="notEligible()">Not Eligible</button>
+        <button class="btn btn-sm btn-default" style="background-color : #ff0000; border-color: #ff0000;color: #ffffff;"" ng-click="notEligible()">Not Eligible</button>
       </div>
       <h4><span class="fa fa-hand-stop-o"></span>&emsp; Oh no! Customer status is not verified!</h4>
       <p>The NetID customer input is not verified by the system. Please make sure he/she is a student at Emory.</p>
@@ -248,7 +248,7 @@
                     <div class="form-horizontal">
                       <div class="form-group" style="text-align: left;">
                         <label class="col-lg-2 col-md-2 col-sm-2 control-label" style="padding-top: 2px;">Resolution detail:</label>
-                        <textarea class="col-lg-8 col-md-8 col-sm-8 col-xs-12" rows="3" ng-model="selected.resolution"></textarea>
+                        <textarea class="col-lg-8 col-md-8 col-sm-8 col-xs-12" rows="3" ng-model="selected.resolution" style="border-radius: 5px; border-color: lightgray"></textarea>
                       </div>
                     </div>
                   </div>

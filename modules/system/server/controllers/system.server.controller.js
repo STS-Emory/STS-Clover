@@ -133,6 +133,7 @@ exports.update = function(req, res){
     },
     
     function(setting, callback){
+
       // Update the task templates
       for(i = 0; i < setting.task_templates.length; i++)
         if(!setting.task_templates[i]._id)

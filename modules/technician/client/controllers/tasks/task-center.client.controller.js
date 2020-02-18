@@ -25,10 +25,11 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
       });
     };
 
+
     $scope.listChores_dateQuery = function(date) {
       var date_start = new Date(date).getTime(), date_end = date_start + 1000*60*60*24;
       var query = { '$or' : [{ created: { '$gte': date_start, '$lte': date_end } },
-                             { completed: { '$gte': date_start, '$lte': date_end } }] };
+        { completed: { '$gte': date_start, '$lte': date_end } }] };
       $http.post('/api/tech/chore/query', query)
         .success(function(chores) { $scope.chores = chores; })
         .error(function() { alert('Server error when fetching chores.'); });
@@ -80,12 +81,12 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
 
     $scope.querying_sitask = false;
     $scope.$watch('sitask_netid', function(netid) {
-      if(netid && netid.length >= 4) {
+      if(netid && netid.length >= 1) {
         $scope.querying_sitask = true;
 
         var query = { username : { '$regex' : netid, '$options': 'i' } };
         $http.post('/api/tech/sitask/query', query)
-          .success(function(sitasks) { $scope.sitasks = sitasks; })
+          .success(function(sitasks) { $scope.sitasks = sitasks; console.log(sitasks);})
           .error(function() { alert('Server error when fetching STS tasks.'); });
       }
       else if($scope.querying_sitask) {
@@ -93,6 +94,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
         $scope.listSITasks_incomplete();
       }
     });
+
 
     $scope.viewSITask = function(sitask) {
       $http.get('/api/tech/sitask/view/' + sitask._id)
@@ -170,6 +172,7 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
                 if($scope.sitasks[idx]._id === sitask._id){
                   $scope.sitasks.splice(idx, 1);
                   $scope.sitask = undefined;
+                  $scope.selectedTask= [];
                   break;
                 }
               }
@@ -179,14 +182,14 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
       });
     };
 
-    $scope.deleteMult= function () {
+    $scope.deleteMany= function () {
       var modal = ModalLauncher.launchDefaultWarningModal(
         'Confirm: Delete',
         'Are you sure you want to delete '+$scope.selectedTask.length+' task?');
       modal.result.then(function (response) {
         if(response){
           
-          $http.post('/deleteMult', $scope.selectedTask)
+          $http.post('/deleteMany', $scope.selectedTask)
             .success(
               function(){
                 var SITasks = $scope.selectedTask;
@@ -194,9 +197,9 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
                   var tID = $scope.sitasks.indexOf(SITasks[idx]);
                   if(tID != -1 && $scope.sitasks[tID]._id === SITasks[idx]._id){
                     $scope.sitasks.splice(tID, 1);
-      
                   }
                 }
+                $scope.selectedTask= [];
               }) 
             .error(function(){alert('Failed request. Check console for the error.');});
         }
@@ -204,3 +207,4 @@ angular.module('technician').controller('TaskCenterController', ['$scope', '$sta
     };
   }
 ]);
+

@@ -36,7 +36,7 @@ exports.create = function(req, res) {
 
 exports.list = function(req, res) {
   SITask.find({ walkin : { $exists : false } }).populate(populate_options)
-    .sort([['_id', -1]]).exec(function(err, sitasks) {
+    .sort([['_id', -1]]).limit(400).exec(function(err, sitasks) {
       if(err) { console.error(err); res.sendStatus(500); }
       else {
         Chore.populate(sitasks, populate_options_chore, function (err, sitasks) {

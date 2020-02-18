@@ -18,7 +18,7 @@ var popOpt = [
 
 var
   WalkinSurveyBroadcast = function() {
-    return schedule.scheduleJob('0 0 9-19 * * 1-5', function(){
+    return schedule.scheduleJob('0 1 9-19 * * 1-5', function(){
       var i, user, start = new Date(Date.now()-60*60*1000), end = new Date(Date.now());
 
       Walkin.find({ status : 'Completed', isActive : true, resolutionTime : { $gte: start, $lt : end },
@@ -77,7 +77,7 @@ var
           }
 
           // send email to admins
-          if(technician.length!==0 || queue)
+          if(technician.length!==0 || queue){
             System.find({}, { admin_email:1, _id:0 }).exec(function(err, admins){
               if(err) return console.log(err);
               else {for (var i=0; i<admins.length; i++){
@@ -86,7 +86,9 @@ var
               }
               }
             });
-          console.log('**** sent emial to Admin ****');
+            console.log('**** sent emial to Admin ****');
+          }
+          
         }
       });
     });  
@@ -121,4 +123,3 @@ exports.init = function(setting, callback){
 
   callback();
 };
-
